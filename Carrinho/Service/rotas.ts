@@ -1,4 +1,4 @@
-const API_URL = "https://loja-api-wheat.vercel.app";
+import { API_URL } from "../Config/apiConfig";
 
 export const ROTAS = {
   produtos: `${API_URL}/produtos`,

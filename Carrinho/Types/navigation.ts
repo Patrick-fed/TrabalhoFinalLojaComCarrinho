@@ -1,8 +1,11 @@
+import type { Produto } from "./types";
+
 export type AuthStackParamList = {
   Login: undefined;
   Cadastro: undefined;
 };
 
 export type AppStackParamList = {
-  Home: undefined;
+  Catalogo: undefined;
+  DetalhesProduto: { produto: Produto };
 };

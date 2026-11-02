@@ -2,7 +2,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useAuth } from "../Context/AuthContext";
 import { CadastroScreen } from "../Screens/CadastroScreen";
 import { CarregandoScreen } from "../Screens/CarregandoScreen";
-import { HomeScreen } from "../Screens/HomeScreen";
+import { CatalogoScreen } from "../Screens/CatalogoScreen";
+import { DetalhesProdutoScreen } from "../Screens/DetalhesProdutoScreen";
 import { LoginScreen } from "../Screens/LoginScreen";
 import type { AppStackParamList, AuthStackParamList } from "../Types/navigation";
 
@@ -19,7 +20,11 @@ export function AppNavigator() {
   if (usuario) {
     return (
       <AppStack.Navigator screenOptions={{ headerShown: false }}>
-        <AppStack.Screen name="Home" component={HomeScreen} />
+        <AppStack.Screen name="Catalogo" component={CatalogoScreen} />
+        <AppStack.Screen
+          name="DetalhesProduto"
+          component={DetalhesProdutoScreen}
+        />
       </AppStack.Navigator>
     );
   }
