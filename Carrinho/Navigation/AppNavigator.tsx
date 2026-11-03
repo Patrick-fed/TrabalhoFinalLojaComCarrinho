@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useAuth } from "../Context/AuthContext";
 import { CadastroScreen } from "../Screens/CadastroScreen";
 import { CarregandoScreen } from "../Screens/CarregandoScreen";
+import { CarrinhoScreen } from "../Screens/CarrinhoScreen";
 import { CatalogoScreen } from "../Screens/CatalogoScreen";
 import { DetalhesProdutoScreen } from "../Screens/DetalhesProdutoScreen";
 import { LoginScreen } from "../Screens/LoginScreen";
@@ -25,6 +26,7 @@ export function AppNavigator() {
           name="DetalhesProduto"
           component={DetalhesProdutoScreen}
         />
+        <AppStack.Screen name="Carrinho" component={CarrinhoScreen} />
       </AppStack.Navigator>
     );
   }

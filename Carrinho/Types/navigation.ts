@@ -8,4 +8,5 @@ export type AuthStackParamList = {
 export type AppStackParamList = {
   Catalogo: undefined;
   DetalhesProduto: { produto: Produto };
+  Carrinho: undefined;
 };

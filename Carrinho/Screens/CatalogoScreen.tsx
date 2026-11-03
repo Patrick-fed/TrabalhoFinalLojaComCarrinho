@@ -16,8 +16,10 @@ import { CartaoProduto } from "../Components/CartaoProduto";
 import { MensagemErro } from "../Components/MensagemErro";
 import { SeletorCategorias } from "../Components/SeletorCategorias";
 import { CORES } from "../Constants/cores";
+import { MENSAGENS_CARRINHO } from "../Constants/mensagensCarrinho";
 import { MENSAGENS_CATALOGO } from "../Constants/mensagensCatalogo";
 import { useAuth } from "../Context/AuthContext";
+import { useCarrinho } from "../Context/CarrinhoContext";
 import { listarCategorias, listarProdutos } from "../Service/catalogo";
 import type { CategoriaDisponivel } from "../Types/catalogo";
 import type { AppStackParamList } from "../Types/navigation";
@@ -34,10 +36,19 @@ type CabecalhoProps = {
   email: string;
   saindo: boolean;
   erroLogout: string | null;
+  quantidadeCarrinho: number;
   aoSair: () => void;
+  aoAbrirCarrinho: () => void;
 };
 
-function Cabecalho({ email, saindo, erroLogout, aoSair }: CabecalhoProps) {
+function Cabecalho({
+  email,
+  saindo,
+  erroLogout,
+  quantidadeCarrinho,
+  aoSair,
+  aoAbrirCarrinho,
+}: CabecalhoProps) {
   return (
     <View style={estilos.cabecalho}>
       <View style={estilos.cabecalhoLinha}>
@@ -47,6 +58,23 @@ function Cabecalho({ email, saindo, erroLogout, aoSair }: CabecalhoProps) {
             {email}
           </Text>
         </View>
+
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={`${MENSAGENS_CARRINHO.carrinho}, ${quantidadeCarrinho} itens`}
+          onPress={aoAbrirCarrinho}
+          style={({ pressed }) => [
+            estilos.botaoCarrinho,
+            pressed ? estilos.botaoCarrinhoPressionado : null,
+          ]}
+        >
+          <Text style={estilos.textoBotaoCarrinho}>
+            {MENSAGENS_CARRINHO.carrinho}
+          </Text>
+          <View style={estilos.badgeCarrinho}>
+            <Text style={estilos.textoBadgeCarrinho}>{quantidadeCarrinho}</Text>
+          </View>
+        </Pressable>
 
         <Pressable
           accessibilityRole="button"
@@ -78,6 +106,7 @@ function Cabecalho({ email, saindo, erroLogout, aoSair }: CabecalhoProps) {
 
 export function CatalogoScreen({ navigation }: CatalogoScreenProps) {
   const { usuario, sair } = useAuth();
+  const { carrinho, operacao, adicionarProduto } = useCarrinho();
 
   const [busca, setBusca] = useState("");
   const [buscaAplicada, setBuscaAplicada] = useState("");
@@ -101,11 +130,23 @@ export function CatalogoScreen({ navigation }: CatalogoScreenProps) {
   const [saindo, setSaindo] = useState(false);
   const [erroLogout, setErroLogout] = useState<string | null>(null);
   const [abrindoDetalhes, setAbrindoDetalhes] = useState(false);
+  const [erroAdicao, setErroAdicao] = useState<string | null>(null);
+  const [sucessoAdicao, setSucessoAdicao] = useState<string | null>(null);
 
   const jaCarregouProdutosRef = useRef(false);
   const requisicaoProdutosRef = useRef(0);
   const requisicaoCategoriasRef = useRef(0);
   const navegacaoRef = useRef(false);
+  const timerSucessoRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const quantidadeCarrinho = carrinho?.quantidadeTotal ?? 0;
+  const adicaoDesabilitada = operacao !== null;
+
+  const quantidadesNoCarrinho: Record<number, number> = {};
+
+  for (const item of carrinho?.itens ?? []) {
+    quantidadesNoCarrinho[item.produtoId] = item.quantidade;
+  }
 
   useEffect(() => {
     const termo = busca.trim();
@@ -236,6 +277,43 @@ export function CatalogoScreen({ navigation }: CatalogoScreenProps) {
     }, [])
   );
 
+  useEffect(() => {
+    return () => {
+      if (timerSucessoRef.current) {
+        clearTimeout(timerSucessoRef.current);
+      }
+    };
+  }, []);
+
+  function abrirCarrinho() {
+    navigation.navigate("Carrinho");
+  }
+
+  async function adicionarProdutoAoCarrinho(produto: Produto) {
+    if (operacao !== null || produto.estoque <= 0) {
+      return;
+    }
+
+    setErroAdicao(null);
+    setSucessoAdicao(null);
+
+    if (timerSucessoRef.current) {
+      clearTimeout(timerSucessoRef.current);
+      timerSucessoRef.current = null;
+    }
+
+    try {
+      await adicionarProduto(produto.id, 1);
+      setSucessoAdicao(MENSAGENS_CARRINHO.adicionado);
+      timerSucessoRef.current = setTimeout(() => {
+        setSucessoAdicao(null);
+        timerSucessoRef.current = null;
+      }, 2500);
+    } catch (erro) {
+      setErroAdicao(obterMensagemDeErro(erro));
+    }
+  }
+
   function tentarNovamenteProdutos() {
     if (carregandoInicial || atualizando) {
       return;
@@ -334,9 +412,11 @@ export function CatalogoScreen({ navigation }: CatalogoScreenProps) {
           email={email}
           saindo={saindo}
           erroLogout={erroLogout}
+          quantidadeCarrinho={quantidadeCarrinho}
           aoSair={() => {
             void aoSair();
           }}
+          aoAbrirCarrinho={abrirCarrinho}
         />
 
         <View style={estilos.estadoCentral}>
@@ -357,9 +437,11 @@ export function CatalogoScreen({ navigation }: CatalogoScreenProps) {
         email={email}
         saindo={saindo}
         erroLogout={erroLogout}
+        quantidadeCarrinho={quantidadeCarrinho}
         aoSair={() => {
           void aoSair();
         }}
+        aoAbrirCarrinho={abrirCarrinho}
       />
 
       <FlatList
@@ -368,7 +450,16 @@ export function CatalogoScreen({ navigation }: CatalogoScreenProps) {
         renderItem={({ item }) => (
           <CartaoProduto
             produto={item}
+            quantidadeNoCarrinho={quantidadesNoCarrinho[item.id] ?? 0}
             aoPressionar={abrirDetalhes}
+            aoAdicionar={(produto) => {
+              void adicionarProdutoAoCarrinho(produto);
+            }}
+            adicionando={
+              operacao?.tipo === "adicionar" &&
+              operacao.produtoId === item.id
+            }
+            adicaoDesabilitada={adicaoDesabilitada}
             desabilitado={abrindoDetalhes}
           />
         )}
@@ -378,6 +469,18 @@ export function CatalogoScreen({ navigation }: CatalogoScreenProps) {
         contentContainerStyle={estilos.listaConteudo}
         ListHeaderComponent={
           <View style={estilos.filtros}>
+            {sucessoAdicao ? (
+              <View style={estilos.bannerSucesso}>
+                <Text style={estilos.textoBannerSucesso}>{sucessoAdicao}</Text>
+              </View>
+            ) : null}
+
+            {erroAdicao ? (
+              <View style={estilos.bannerErro}>
+                <MensagemErro mensagem={erroAdicao} />
+              </View>
+            ) : null}
+
             <CampoTexto
               label="Buscar produtos"
               valor={busca}
@@ -518,6 +621,58 @@ const estilos = StyleSheet.create({
     color: CORES.primaria,
     fontSize: 14,
     fontWeight: "700",
+  },
+  botaoCarrinho: {
+    alignItems: "center",
+    alignSelf: "center",
+    backgroundColor: CORES.primaria,
+    borderRadius: 8,
+    flexDirection: "row",
+    justifyContent: "center",
+    marginRight: 8,
+    minHeight: 40,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+  },
+  botaoCarrinhoPressionado: {
+    backgroundColor: CORES.primariaEscura,
+  },
+  textoBotaoCarrinho: {
+    color: CORES.branco,
+    fontSize: 13,
+    fontWeight: "700",
+  },
+  badgeCarrinho: {
+    alignItems: "center",
+    backgroundColor: CORES.branco,
+    borderRadius: 10,
+    justifyContent: "center",
+    marginLeft: 6,
+    minWidth: 20,
+    paddingHorizontal: 5,
+    paddingVertical: 1,
+  },
+  textoBadgeCarrinho: {
+    color: CORES.primaria,
+    fontSize: 12,
+    fontWeight: "700",
+  },
+  bannerSucesso: {
+    backgroundColor: CORES.primariaClara,
+    borderColor: CORES.sucesso,
+    borderRadius: 8,
+    borderWidth: 1,
+    marginBottom: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+  },
+  textoBannerSucesso: {
+    color: CORES.sucesso,
+    fontSize: 13,
+    fontWeight: "600",
+  },
+  bannerErro: {
+    marginBottom: 12,
   },
   erroLogout: {
     marginTop: 8,
