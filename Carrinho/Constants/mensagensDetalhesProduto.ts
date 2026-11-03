@@ -1,0 +1,17 @@
+export const MENSAGENS_DETALHES_PRODUTO = {
+  titulo: "Detalhes do produto",
+  voltar: "Voltar",
+  carregando: "Carregando detalhes...",
+  atualizando: "Atualizando detalhes...",
+  tentarNovamente: "Tentar novamente",
+  descricao: "Descrição",
+  descricaoVazia: "Este produto não possui descrição.",
+  estoqueDisponivel: "Estoque disponível",
+  esgotado: "Esgotado",
+  estoqueEsgotado: "Produto esgotado",
+  adicionarAoCarrinho: "Adicionar ao carrinho",
+  adicionado: "Produto adicionado ao carrinho.",
+  produtoIndisponivel: "Produto não encontrado ou indisponível.",
+  voltarAoCatalogo: "Voltar ao catálogo",
+  imagemIndisponivel: "Imagem indisponível",
+} as const;

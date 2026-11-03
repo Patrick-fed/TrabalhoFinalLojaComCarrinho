@@ -17,8 +17,8 @@
 
 **Purpose**: Confirmar ambiente e referências antes da implementação
 
-- [ ] T001 Confirmar `EXPO_PUBLIC_API_URL` e `EXPO_PUBLIC_API_KEY` em `Carrinho/.env` e instalar dependências com `npm install` em `Carrinho/package.json`
-- [ ] T002 [P] Verificar que `AGENTS.md` aponta para `specs/004-detalhes-produto/plan.md` e que `Carrinho/package.json` não recebeu dependências novas
+- [X] T001 Confirmar `EXPO_PUBLIC_API_URL` e `EXPO_PUBLIC_API_KEY` em `Carrinho/.env` e instalar dependências com `npm install` em `Carrinho/package.json`
+- [X] T002 [P] Verificar que `AGENTS.md` aponta para `specs/004-detalhes-produto/plan.md` e que `Carrinho/package.json` não recebeu dependências novas
 
 ---
 
@@ -28,8 +28,8 @@
 
 **⚠️ CRITICAL**: Nenhuma história pode começar antes desta fase
 
-- [ ] T003 [P] Adicionar `buscarProdutoPorId(id: number, signal?: AbortSignal): Promise<Produto>` em `Carrinho/Service/catalogo.ts`, reutilizando `ROTAS.produtoPorId`, `requisitar`, `converterProduto` e `erroPorStatus`; propagar `AbortError` e mapear 404
-- [ ] T004 [P] Criar `Carrinho/Constants/mensagensDetalhesProduto.ts` com os textos da tela (título, voltar, carregando, atualizando, tentar novamente, descrição, estoque, esgotado, adicionar, adicionado, indisponível, imagem indisponível)
+- [X] T003 [P] Adicionar `buscarProdutoPorId(id: number, signal?: AbortSignal): Promise<Produto>` em `Carrinho/Service/catalogo.ts`, reutilizando `ROTAS.produtoPorId`, `requisitar`, `converterProduto` e `erroPorStatus`; propagar `AbortError` e mapear 404
+- [X] T004 [P] Criar `Carrinho/Constants/mensagensDetalhesProduto.ts` com os textos da tela (título, voltar, carregando, atualizando, tentar novamente, descrição, estoque, esgotado, adicionar, adicionado, indisponível, imagem indisponível)
 
 **Checkpoint**: Serviço e mensagens prontos — histórias podem começar
 
@@ -43,9 +43,9 @@
 
 ### Implementation for User Story 1
 
-- [ ] T005 [US1] Implementar estados `produto`, `carregando`, `erro`, `imagemFalhou` e `useEffect` com `AbortController`/`requisicaoRef` chamando `buscarProdutoPorId` em `Carrinho/Screens/DetalhesProdutoScreen.tsx`
-- [ ] T006 [US1] Renderizar cabeçalho com "Voltar", imagem ampliada com fallback, nome, preço via `formatarPrecoCentavos`, estoque e descrição em `ScrollView` em `Carrinho/Screens/DetalhesProdutoScreen.tsx`
-- [ ] T007 [US1] Implementar estado de carregamento com `CarregandoScreen`, erro com `MensagemErro` + "Tentar novamente" e estado de produto indisponível (404) com "Voltar ao catálogo" em `Carrinho/Screens/DetalhesProdutoScreen.tsx`
+- [X] T005 [US1] Implementar estados `produto`, `carregando`, `erro`, `imagemFalhou` e `useEffect` com `AbortController`/`requisicaoRef` chamando `buscarProdutoPorId` em `Carrinho/Screens/DetalhesProdutoScreen.tsx`
+- [X] T006 [US1] Renderizar cabeçalho com "Voltar", imagem ampliada com fallback, nome, preço via `formatarPrecoCentavos`, estoque e descrição em `ScrollView` em `Carrinho/Screens/DetalhesProdutoScreen.tsx`
+- [X] T007 [US1] Implementar estado de carregamento com `CarregandoScreen`, erro com `MensagemErro` + "Tentar novamente" e estado de produto indisponível (404) com "Voltar ao catálogo" em `Carrinho/Screens/DetalhesProdutoScreen.tsx`
 
 **Checkpoint**: US1 funcional e testável isoladamente (MVP)
 
@@ -59,9 +59,9 @@
 
 ### Implementation for User Story 2
 
-- [ ] T008 [US2] Calcular derivados `quantidadeNoCarrinho`, `estoqueDisponivel`, `esgotado`, `adicionando` e `adicaoDesabilitada` a partir de `carrinho` e `operacao` em `Carrinho/Screens/DetalhesProdutoScreen.tsx`
-- [ ] T009 [US2] Implementar `adicionarAoCarrinho` com `adicionarProduto(produto.id, 1)`, guarda de operação ativa/estoque, banner temporário de sucesso e erro via `obterMensagemDeErro` em `Carrinho/Screens/DetalhesProdutoScreen.tsx`
-- [ ] T010 [US2] Integrar `BotaoPrincipal` ("Adicionar ao carrinho"/"Esgotado", spinner e desabilitado) e `MensagemErro` para falha de adição em `Carrinho/Screens/DetalhesProdutoScreen.tsx`
+- [X] T008 [US2] Calcular derivados `quantidadeNoCarrinho`, `estoqueDisponivel`, `esgotado`, `adicionando` e `adicaoDesabilitada` a partir de `carrinho` e `operacao` em `Carrinho/Screens/DetalhesProdutoScreen.tsx`
+- [X] T009 [US2] Implementar `adicionarAoCarrinho` com `adicionarProduto(produto.id, 1)`, guarda de operação ativa/estoque, banner temporário de sucesso e erro via `obterMensagemDeErro` em `Carrinho/Screens/DetalhesProdutoScreen.tsx`
+- [X] T010 [US2] Integrar `BotaoPrincipal` ("Adicionar ao carrinho"/"Esgotado", spinner e desabilitado) e `MensagemErro` para falha de adição em `Carrinho/Screens/DetalhesProdutoScreen.tsx`
 
 **Checkpoint**: US1 e US2 funcionais independentemente
 
@@ -75,8 +75,8 @@
 
 ### Implementation for User Story 3
 
-- [ ] T011 [US3] Adicionar guarda por identificador de requisição, abortar consulta ao desmontar/trocar de produto e limpar timers de sucesso no logout em `Carrinho/Screens/DetalhesProdutoScreen.tsx`
-- [ ] T012 [US3] Verificar preservação de busca/categoria/posição e isolamento por usuário em `Carrinho/Screens/CatalogoScreen.tsx`, `Carrinho/Navigation/AppNavigator.tsx` e `Carrinho/Context/CarrinhoContext.tsx`, ajustando apenas se houver regressão
+- [X] T011 [US3] Adicionar guarda por identificador de requisição, abortar consulta ao desmontar/trocar de produto e limpar timers de sucesso no logout em `Carrinho/Screens/DetalhesProdutoScreen.tsx`
+- [X] T012 [US3] Verificar preservação de busca/categoria/posição e isolamento por usuário em `Carrinho/Screens/CatalogoScreen.tsx`, `Carrinho/Navigation/AppNavigator.tsx` e `Carrinho/Context/CarrinhoContext.tsx`, ajustando apenas se houver regressão
 
 **Checkpoint**: Todas as histórias funcionais e consistentes
 
@@ -86,9 +86,9 @@
 
 **Purpose**: Acessibilidade, tipagem e validação final
 
-- [ ] T013 [P] Revisar rótulos de acessibilidade, estados de botão e uso de `CORES`/`StyleSheet` em `Carrinho/Screens/DetalhesProdutoScreen.tsx`
-- [ ] T014 Executar `npm run typecheck` em `Carrinho/` e corrigir erros de TypeScript
-- [ ] T015 Executar os cenários manuais de `specs/004-detalhes-produto/quickstart.md` e registrar os resultados
+- [X] T013 [P] Revisar rótulos de acessibilidade, estados de botão e uso de `CORES`/`StyleSheet` em `Carrinho/Screens/DetalhesProdutoScreen.tsx`
+- [X] T014 Executar `npm run typecheck` em `Carrinho/` e corrigir erros de TypeScript
+- [X] T015 Executar os cenários manuais de `specs/004-detalhes-produto/quickstart.md` e registrar os resultados
 
 ---
 

@@ -174,6 +174,15 @@ export async function listarProdutos(
   return dados.map(converterProduto);
 }
 
+export async function buscarProdutoPorId(
+  id: number,
+  signal?: AbortSignal
+): Promise<Produto> {
+  const dados = await requisitar(ROTAS.produtoPorId(id), signal);
+
+  return converterProduto(dados);
+}
+
 export async function listarCategorias(
   signal?: AbortSignal
 ): Promise<CategoriaDisponivel[]> {
