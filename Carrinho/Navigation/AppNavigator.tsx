@@ -5,6 +5,7 @@ import { CarregandoScreen } from "../Screens/CarregandoScreen";
 import { CarrinhoScreen } from "../Screens/CarrinhoScreen";
 import { CatalogoScreen } from "../Screens/CatalogoScreen";
 import { CheckoutScreen } from "../Screens/CheckoutScreen";
+import { ConfirmacaoCompraScreen } from "../Screens/ConfirmacaoCompraScreen";
 import { DetalhesProdutoScreen } from "../Screens/DetalhesProdutoScreen";
 import { LoginScreen } from "../Screens/LoginScreen";
 import type { AppStackParamList, AuthStackParamList } from "../Types/navigation";
@@ -29,6 +30,10 @@ export function AppNavigator() {
         />
         <AppStack.Screen name="Carrinho" component={CarrinhoScreen} />
         <AppStack.Screen name="Checkout" component={CheckoutScreen} />
+        <AppStack.Screen
+          name="ConfirmacaoCompra"
+          component={ConfirmacaoCompraScreen}
+        />
       </AppStack.Navigator>
     );
   }

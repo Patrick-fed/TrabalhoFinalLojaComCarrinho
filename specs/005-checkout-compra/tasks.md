@@ -64,11 +64,11 @@
 
 ### Implementation for User Story 2
 
-- [ ] T013 [P] [US2] Build `ConfirmacaoCompraScreen` with purchase ID, items/quantities, total, payment label, status, cart-update notice, and "Voltar ao catálogo" in `Carrinho/Screens/ConfirmacaoCompraScreen.tsx` (depends T001, T002, T003)
+- [x] T013 [P] [US2] Build `ConfirmacaoCompraScreen` with purchase ID, items/quantities, total, payment label, status, cart-update notice, and "Voltar ao catálogo" in `Carrinho/Screens/ConfirmacaoCompraScreen.tsx` (depends T001, T002, T003)
 - [x] T014 [US2] Implement purchase submission in `Carrinho/Screens/CheckoutScreen.tsx` with `finalizandoRef`, disabled button, `AbortController`, and `ErroCheckout` messages (depends T009, T010, T006)
 - [x] T015 [US2] Call `limparCarrinho()` after success, treat `http_404` as already empty, and pass `carrinhoAtualizado` to confirmation in `Carrinho/Screens/CheckoutScreen.tsx` (depends T014, T007)
-- [ ] T016 [US2] Register `ConfirmacaoCompra` in `Carrinho/Navigation/AppNavigator.tsx` and wire `navigation.replace` from checkout (depends T013, T014)
-- [ ] T017 [US2] Implement "Voltar ao catálogo" with `navigation.reset` to `Catalogo` and retry pending cart cleanup in `Carrinho/Screens/ConfirmacaoCompraScreen.tsx` (depends T013, T015, T016)
+- [x] T016 [US2] Register `ConfirmacaoCompra` in `Carrinho/Navigation/AppNavigator.tsx` and wire `navigation.replace` from checkout (depends T013, T014)
+- [x] T017 [US2] Implement "Voltar ao catálogo" with `navigation.reset` to `Catalogo` and retry pending cart cleanup in `Carrinho/Screens/ConfirmacaoCompraScreen.tsx` (depends T013, T015, T016)
 
 **Checkpoint**: User Stories 1 and 2 work together; the full purchase flow is functional.
 
