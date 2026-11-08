@@ -30,6 +30,7 @@ export const MENSAGENS_CHECKOUT = {
   tentarNovamente: "Tentar novamente",
   carrinhoVazio: "Seu carrinho está vazio.",
   formasVazias: "Nenhuma forma de pagamento disponível.",
+  formaPagamentoIndisponivel: "Indisponível",
   selecioneFormaPagamento: "Selecione uma forma de pagamento.",
   avisoDivergencia:
     "Seu carrinho foi atualizado. Revise e confirme novamente.",

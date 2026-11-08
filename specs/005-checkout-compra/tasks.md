@@ -46,11 +46,11 @@
 
 ### Implementation for User Story 1
 
-- [ ] T008 [US1] Build `CheckoutScreen` with header/back, cart summary (name, quantity, unit price, subtotal, total), loading, error, and empty-cart states in `Carrinho/Screens/CheckoutScreen.tsx` (depends T003, T006, T007)
-- [ ] T009 [US1] Implement payment methods fetch with retry, fixed labels, unknown-id disabled handling, and single-selection state in `Carrinho/Screens/CheckoutScreen.tsx` (depends T008)
-- [ ] T010 [US1] Block checkout with empty cart and disable "Finalizar compra" until a known payment method is selected in `Carrinho/Screens/CheckoutScreen.tsx` (depends T009)
-- [ ] T011 [US1] Add "Finalizar compra" action to the cart screen that navigates to `Checkout` in `Carrinho/Screens/CarrinhoScreen.tsx` (depends T004, T005)
-- [ ] T012 [US1] Register the `Checkout` screen in `Carrinho/Navigation/AppNavigator.tsx` (depends T008, T011)
+- [x] T008 [US1] Build `CheckoutScreen` with header/back, cart summary (name, quantity, unit price, subtotal, total), loading, error, and empty-cart states in `Carrinho/Screens/CheckoutScreen.tsx` (depends T003, T006, T007)
+- [x] T009 [US1] Implement payment methods fetch with retry, fixed labels, unknown-id disabled handling, and single-selection state in `Carrinho/Screens/CheckoutScreen.tsx` (depends T008)
+- [x] T010 [US1] Block checkout with empty cart and disable "Finalizar compra" until a known payment method is selected in `Carrinho/Screens/CheckoutScreen.tsx` (depends T009)
+- [x] T011 [US1] Add "Finalizar compra" action to the cart screen that navigates to `Checkout` in `Carrinho/Screens/CarrinhoScreen.tsx` (depends T004, T005)
+- [x] T012 [US1] Register the `Checkout` screen in `Carrinho/Navigation/AppNavigator.tsx` (depends T008, T011)
 
 **Checkpoint**: User Story 1 is fully functional and testable independently.
 
@@ -65,8 +65,8 @@
 ### Implementation for User Story 2
 
 - [ ] T013 [P] [US2] Build `ConfirmacaoCompraScreen` with purchase ID, items/quantities, total, payment label, status, cart-update notice, and "Voltar ao catálogo" in `Carrinho/Screens/ConfirmacaoCompraScreen.tsx` (depends T001, T002, T003)
-- [ ] T014 [US2] Implement purchase submission in `Carrinho/Screens/CheckoutScreen.tsx` with `finalizandoRef`, disabled button, `AbortController`, and `ErroCheckout` messages (depends T009, T010, T006)
-- [ ] T015 [US2] Call `limparCarrinho()` after success, treat `http_404` as already empty, and pass `carrinhoAtualizado` to confirmation in `Carrinho/Screens/CheckoutScreen.tsx` (depends T014, T007)
+- [x] T014 [US2] Implement purchase submission in `Carrinho/Screens/CheckoutScreen.tsx` with `finalizandoRef`, disabled button, `AbortController`, and `ErroCheckout` messages (depends T009, T010, T006)
+- [x] T015 [US2] Call `limparCarrinho()` after success, treat `http_404` as already empty, and pass `carrinhoAtualizado` to confirmation in `Carrinho/Screens/CheckoutScreen.tsx` (depends T014, T007)
 - [ ] T016 [US2] Register `ConfirmacaoCompra` in `Carrinho/Navigation/AppNavigator.tsx` and wire `navigation.replace` from checkout (depends T013, T014)
 - [ ] T017 [US2] Implement "Voltar ao catálogo" with `navigation.reset` to `Catalogo` and retry pending cart cleanup in `Carrinho/Screens/ConfirmacaoCompraScreen.tsx` (depends T013, T015, T016)
 
