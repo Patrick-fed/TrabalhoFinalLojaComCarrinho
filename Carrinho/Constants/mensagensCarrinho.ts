@@ -22,6 +22,7 @@ export const MENSAGENS_CARRINHO = {
   subtotal: "Subtotal",
   total: "Total",
   quantidadeTotal: "Quantidade total",
+  finalizarCompra: "Finalizar compra",
   voltar: "Voltar",
   voltarAoCatalogo: "Voltar ao catálogo",
 } as const;

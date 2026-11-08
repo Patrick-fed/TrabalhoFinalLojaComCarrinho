@@ -17,11 +17,11 @@
 
 **Purpose**: Types, constants, and navigation contracts shared by all stories
 
-- [ ] T001 [P] Create `FormaPagamentoDisponivel` and `ErroCheckout` types in `Carrinho/Types/checkout.ts`
-- [ ] T002 [P] Change `Compra.status` from `"confirmada"` to `string` in `Carrinho/Types/types.ts`
-- [ ] T003 [P] Create checkout messages, error texts, and fixed payment labels (`pix` → Pix, `cartao` → Cartão, `boleto` → Boleto) in `Carrinho/Constants/mensagensCheckout.ts`
-- [ ] T004 [P] Add the "Finalizar compra" label to `Carrinho/Constants/mensagensCarrinho.ts`
-- [ ] T005 [P] Add `Checkout: undefined` and `ConfirmacaoCompra: { compra: Compra; carrinhoAtualizado: boolean }` to `AppStackParamList` in `Carrinho/Types/navigation.ts`
+- [x] T001 [P] Create `FormaPagamentoDisponivel` and `ErroCheckout` types in `Carrinho/Types/checkout.ts`
+- [x] T002 [P] Change `Compra.status` from `"confirmada"` to `string` in `Carrinho/Types/types.ts`
+- [x] T003 [P] Create checkout messages, error texts, and fixed payment labels (`pix` → Pix, `cartao` → Cartão, `boleto` → Boleto) in `Carrinho/Constants/mensagensCheckout.ts`
+- [x] T004 [P] Add the "Finalizar compra" label to `Carrinho/Constants/mensagensCarrinho.ts`
+- [x] T005 [P] Add `Checkout: undefined` and `ConfirmacaoCompra: { compra: Compra; carrinhoAtualizado: boolean }` to `AppStackParamList` in `Carrinho/Types/navigation.ts`
 
 ---
 

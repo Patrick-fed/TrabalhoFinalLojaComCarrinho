@@ -1,4 +1,4 @@
-import type { Produto } from "./types";
+import type { Compra, Produto } from "./types";
 
 export type AuthStackParamList = {
   Login: undefined;
@@ -9,4 +9,6 @@ export type AppStackParamList = {
   Catalogo: undefined;
   DetalhesProduto: { produto: Produto };
   Carrinho: undefined;
+  Checkout: undefined;
+  ConfirmacaoCompra: { compra: Compra; carrinhoAtualizado: boolean };
 };
