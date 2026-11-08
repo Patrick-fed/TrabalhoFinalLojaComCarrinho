@@ -31,8 +31,8 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T006 Implement `listarFormasPagamento(signal?)` and `registrarCompra(usuarioId, formaPagamento, signal?)` in `Carrinho/Service/compras.ts` using `ROTAS.formasPagamento`/`ROTAS.compras`, `x-api-key`, response validation, `ErroCheckout` mapping, and `AbortError` propagation (depends T001)
-- [ ] T007 [P] Change `recarregar()` in `Carrinho/Context/CarrinhoContext.tsx` to return `Promise<Carrinho | null>` while preserving existing state updates
+- [x] T006 Implement `listarFormasPagamento(signal?)` and `registrarCompra(usuarioId, formaPagamento, signal?)` in `Carrinho/Service/compras.ts` using `ROTAS.formasPagamento`/`ROTAS.compras`, `x-api-key`, response validation, `ErroCheckout` mapping, and `AbortError` propagation (depends T001)
+- [x] T007 [P] Change `recarregar()` in `Carrinho/Context/CarrinhoContext.tsx` to return `Promise<Carrinho | null>` while preserving existing state updates
 
 **Checkpoint**: Types, service, and context are ready; user stories can begin.
 
