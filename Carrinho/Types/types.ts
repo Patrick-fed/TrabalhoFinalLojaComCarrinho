@@ -44,7 +44,7 @@ export type Compra = {
   quantidadeTotal: number;
   total: number; // em centavos
   formaPagamento: FormaPagamento;
-  status: "confirmada";
+  status: string;
   criadaEm: string; // data ISO
 };
 

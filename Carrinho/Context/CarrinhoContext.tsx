@@ -26,7 +26,7 @@ type CarrinhoContextValue = {
   carregando: boolean;
   erro: string | null;
   operacao: OperacaoCarrinho | null;
-  recarregar: () => Promise<void>;
+  recarregar: () => Promise<Carrinho | null>;
   adicionarProduto: (produtoId: number, quantidade?: number) => Promise<void>;
   alterarQuantidade: (produtoId: number, quantidade: number) => Promise<void>;
   removerItem: (produtoId: number) => Promise<void>;
@@ -71,7 +71,10 @@ export function CarrinhoProvider({ children }: CarrinhoProviderProps) {
   const controladorMutacaoRef = useRef<AbortController | null>(null);
 
   const carregarCarrinho = useCallback(
-    async (usuarioId: string, sessao: number) => {
+    async (
+      usuarioId: string,
+      sessao: number
+    ): Promise<Carrinho | null> => {
       const requisicaoId = ++requisicaoRef.current;
 
       controladorCargaRef.current?.abort();
@@ -90,11 +93,12 @@ export function CarrinhoProvider({ children }: CarrinhoProviderProps) {
           requisicaoId !== requisicaoRef.current ||
           usuarioId !== uidRef.current
         ) {
-          return;
+          return null;
         }
 
         setCarrinho(dados);
         setErro(null);
+        return dados;
       } catch (erroCarga) {
         if (
           controller.signal.aborted ||
@@ -103,10 +107,11 @@ export function CarrinhoProvider({ children }: CarrinhoProviderProps) {
           requisicaoId !== requisicaoRef.current ||
           usuarioId !== uidRef.current
         ) {
-          return;
+          return null;
         }
 
         setErro(obterMensagemDeErro(erroCarga));
+        return null;
       } finally {
         if (
           !controller.signal.aborted &&
@@ -147,14 +152,14 @@ export function CarrinhoProvider({ children }: CarrinhoProviderProps) {
     };
   }, [uid, carregarCarrinho]);
 
-  const recarregar = useCallback(async () => {
+  const recarregar = useCallback(async (): Promise<Carrinho | null> => {
     const usuarioId = uidRef.current;
 
     if (!usuarioId || operacaoAtivaRef.current) {
-      return;
+      return null;
     }
 
-    await carregarCarrinho(usuarioId, sessaoRef.current);
+    return carregarCarrinho(usuarioId, sessaoRef.current);
   }, [carregarCarrinho]);
 
   const executarOperacao = useCallback(

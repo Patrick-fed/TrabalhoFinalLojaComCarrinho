@@ -327,6 +327,16 @@ export function CarrinhoScreen({ navigation }: CarrinhoScreenProps) {
                 {formatarPrecoCentavos(carrinho.total)}
               </Text>
             </View>
+
+            {quantidadeItens > 0 ? (
+              <View style={estilos.areaFinalizar}>
+                <BotaoPrincipal
+                  titulo={MENSAGENS_CARRINHO.finalizarCompra}
+                  aoPressionar={() => navigation.navigate("Checkout")}
+                  desabilitado={operacao !== null}
+                />
+              </View>
+            ) : null}
           </View>
         }
       />
@@ -467,5 +477,8 @@ const estilos = StyleSheet.create({
     color: CORES.primaria,
     fontSize: 22,
     fontWeight: "700",
+  },
+  areaFinalizar: {
+    marginTop: 12,
   },
 });

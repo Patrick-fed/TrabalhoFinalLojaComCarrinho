@@ -17,6 +17,7 @@ type ItemCarrinhoCardProps = {
   item: ItemCarrinho;
   operacao: OperacaoCarrinho | null;
   estoque?: number;
+  somenteLeitura?: boolean;
   aoAumentar: (item: ItemCarrinho) => void;
   aoDiminuir: (item: ItemCarrinho) => void;
   aoRemover: (item: ItemCarrinho) => void;
@@ -50,6 +51,7 @@ export function ItemCarrinhoCard({
   item,
   operacao,
   estoque,
+  somenteLeitura = false,
   aoAumentar,
   aoDiminuir,
   aoRemover,
@@ -117,81 +119,95 @@ export function ItemCarrinhoCard({
         </View>
       </View>
 
-      <View style={estilos.rodape}>
-        <View style={estilos.controlesQuantidade}>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={`Diminuir quantidade de ${item.nome}`}
-            accessibilityState={{
-              disabled: diminuirDesabilitado,
-              busy: operacaoNoItem,
-            }}
-            disabled={diminuirDesabilitado}
-            onPress={() => aoDiminuir(item)}
-            style={({ pressed }) => [
-              estilos.botaoControle,
-              diminuirDesabilitado ? estilos.botaoDesabilitado : null,
-              pressed && !diminuirDesabilitado
-                ? estilos.botaoControlePressionado
-                : null,
-            ]}
-          >
-            <Text style={estilos.textoControle}>−</Text>
-          </Pressable>
-
+      {somenteLeitura ? (
+        <View style={estilos.linhaQuantidadeLeitura}>
+          <Text style={estilos.labelSubtotal}>
+            {MENSAGENS_CARRINHO.quantidade}
+          </Text>
           <Text
-            style={estilos.quantidade}
+            style={estilos.valorQuantidadeLeitura}
             accessibilityLabel={`Quantidade ${item.quantidade}`}
           >
             {item.quantidade}
           </Text>
+        </View>
+      ) : (
+        <View style={estilos.rodape}>
+          <View style={estilos.controlesQuantidade}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={`Diminuir quantidade de ${item.nome}`}
+              accessibilityState={{
+                disabled: diminuirDesabilitado,
+                busy: operacaoNoItem,
+              }}
+              disabled={diminuirDesabilitado}
+              onPress={() => aoDiminuir(item)}
+              style={({ pressed }) => [
+                estilos.botaoControle,
+                diminuirDesabilitado ? estilos.botaoDesabilitado : null,
+                pressed && !diminuirDesabilitado
+                  ? estilos.botaoControlePressionado
+                  : null,
+              ]}
+            >
+              <Text style={estilos.textoControle}>−</Text>
+            </Pressable>
+
+            <Text
+              style={estilos.quantidade}
+              accessibilityLabel={`Quantidade ${item.quantidade}`}
+            >
+              {item.quantidade}
+            </Text>
+
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={`Aumentar quantidade de ${item.nome}`}
+              accessibilityHint={
+                descricaoEstoque?.critico ? descricaoEstoque.texto : undefined
+              }
+              accessibilityState={{
+                disabled: aumentarDesabilitado,
+                busy: operacaoNoItem,
+              }}
+              disabled={aumentarDesabilitado}
+              onPress={() => aoAumentar(item)}
+              style={({ pressed }) => [
+                estilos.botaoControle,
+                aumentarDesabilitado ? estilos.botaoDesabilitado : null,
+                pressed && !aumentarDesabilitado
+                  ? estilos.botaoControlePressionado
+                  : null,
+              ]}
+            >
+              <Text style={estilos.textoControle}>+</Text>
+            </Pressable>
+          </View>
 
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={`Aumentar quantidade de ${item.nome}`}
-            accessibilityHint={
-              descricaoEstoque?.critico ? descricaoEstoque.texto : undefined
-            }
+            accessibilityLabel={`Remover ${item.nome} do carrinho`}
             accessibilityState={{
-              disabled: aumentarDesabilitado,
+              disabled: controlesDesabilitados,
               busy: operacaoNoItem,
             }}
-            disabled={aumentarDesabilitado}
-            onPress={() => aoAumentar(item)}
+            disabled={controlesDesabilitados}
+            onPress={() => aoRemover(item)}
             style={({ pressed }) => [
-              estilos.botaoControle,
-              aumentarDesabilitado ? estilos.botaoDesabilitado : null,
-              pressed && !aumentarDesabilitado
-                ? estilos.botaoControlePressionado
+              estilos.botaoRemover,
+              controlesDesabilitados ? estilos.botaoDesabilitado : null,
+              pressed && !controlesDesabilitados
+                ? estilos.botaoRemoverPressionado
                 : null,
             ]}
           >
-            <Text style={estilos.textoControle}>+</Text>
+            <Text style={estilos.textoRemover}>
+              {MENSAGENS_CARRINHO.remover}
+            </Text>
           </Pressable>
         </View>
-
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={`Remover ${item.nome} do carrinho`}
-          accessibilityState={{
-            disabled: controlesDesabilitados,
-            busy: operacaoNoItem,
-          }}
-          disabled={controlesDesabilitados}
-          onPress={() => aoRemover(item)}
-          style={({ pressed }) => [
-            estilos.botaoRemover,
-            controlesDesabilitados ? estilos.botaoDesabilitado : null,
-            pressed && !controlesDesabilitados
-              ? estilos.botaoRemoverPressionado
-              : null,
-          ]}
-        >
-          <Text style={estilos.textoRemover}>
-            {MENSAGENS_CARRINHO.remover}
-          </Text>
-        </Pressable>
-      </View>
+      )}
 
       {operacaoNoItem ? (
         <View style={estilos.indicadorOperacao}>
@@ -328,6 +344,17 @@ const estilos = StyleSheet.create({
   },
   botaoDesabilitado: {
     opacity: 0.5,
+  },
+  linhaQuantidadeLeitura: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 12,
+  },
+  valorQuantidadeLeitura: {
+    color: CORES.texto,
+    fontSize: 16,
+    fontWeight: "700",
   },
   indicadorOperacao: {
     alignItems: "center",

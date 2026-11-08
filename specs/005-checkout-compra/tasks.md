@@ -17,11 +17,11 @@
 
 **Purpose**: Types, constants, and navigation contracts shared by all stories
 
-- [ ] T001 [P] Create `FormaPagamentoDisponivel` and `ErroCheckout` types in `Carrinho/Types/checkout.ts`
-- [ ] T002 [P] Change `Compra.status` from `"confirmada"` to `string` in `Carrinho/Types/types.ts`
-- [ ] T003 [P] Create checkout messages, error texts, and fixed payment labels (`pix` → Pix, `cartao` → Cartão, `boleto` → Boleto) in `Carrinho/Constants/mensagensCheckout.ts`
-- [ ] T004 [P] Add the "Finalizar compra" label to `Carrinho/Constants/mensagensCarrinho.ts`
-- [ ] T005 [P] Add `Checkout: undefined` and `ConfirmacaoCompra: { compra: Compra; carrinhoAtualizado: boolean }` to `AppStackParamList` in `Carrinho/Types/navigation.ts`
+- [x] T001 [P] Create `FormaPagamentoDisponivel` and `ErroCheckout` types in `Carrinho/Types/checkout.ts`
+- [x] T002 [P] Change `Compra.status` from `"confirmada"` to `string` in `Carrinho/Types/types.ts`
+- [x] T003 [P] Create checkout messages, error texts, and fixed payment labels (`pix` → Pix, `cartao` → Cartão, `boleto` → Boleto) in `Carrinho/Constants/mensagensCheckout.ts`
+- [x] T004 [P] Add the "Finalizar compra" label to `Carrinho/Constants/mensagensCarrinho.ts`
+- [x] T005 [P] Add `Checkout: undefined` and `ConfirmacaoCompra: { compra: Compra; carrinhoAtualizado: boolean }` to `AppStackParamList` in `Carrinho/Types/navigation.ts`
 
 ---
 
@@ -31,8 +31,8 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T006 Implement `listarFormasPagamento(signal?)` and `registrarCompra(usuarioId, formaPagamento, signal?)` in `Carrinho/Service/compras.ts` using `ROTAS.formasPagamento`/`ROTAS.compras`, `x-api-key`, response validation, `ErroCheckout` mapping, and `AbortError` propagation (depends T001)
-- [ ] T007 [P] Change `recarregar()` in `Carrinho/Context/CarrinhoContext.tsx` to return `Promise<Carrinho | null>` while preserving existing state updates
+- [x] T006 Implement `listarFormasPagamento(signal?)` and `registrarCompra(usuarioId, formaPagamento, signal?)` in `Carrinho/Service/compras.ts` using `ROTAS.formasPagamento`/`ROTAS.compras`, `x-api-key`, response validation, `ErroCheckout` mapping, and `AbortError` propagation (depends T001)
+- [x] T007 [P] Change `recarregar()` in `Carrinho/Context/CarrinhoContext.tsx` to return `Promise<Carrinho | null>` while preserving existing state updates
 
 **Checkpoint**: Types, service, and context are ready; user stories can begin.
 
@@ -46,11 +46,11 @@
 
 ### Implementation for User Story 1
 
-- [ ] T008 [US1] Build `CheckoutScreen` with header/back, cart summary (name, quantity, unit price, subtotal, total), loading, error, and empty-cart states in `Carrinho/Screens/CheckoutScreen.tsx` (depends T003, T006, T007)
-- [ ] T009 [US1] Implement payment methods fetch with retry, fixed labels, unknown-id disabled handling, and single-selection state in `Carrinho/Screens/CheckoutScreen.tsx` (depends T008)
-- [ ] T010 [US1] Block checkout with empty cart and disable "Finalizar compra" until a known payment method is selected in `Carrinho/Screens/CheckoutScreen.tsx` (depends T009)
-- [ ] T011 [US1] Add "Finalizar compra" action to the cart screen that navigates to `Checkout` in `Carrinho/Screens/CarrinhoScreen.tsx` (depends T004, T005)
-- [ ] T012 [US1] Register the `Checkout` screen in `Carrinho/Navigation/AppNavigator.tsx` (depends T008, T011)
+- [x] T008 [US1] Build `CheckoutScreen` with header/back, cart summary (name, quantity, unit price, subtotal, total), loading, error, and empty-cart states in `Carrinho/Screens/CheckoutScreen.tsx` (depends T003, T006, T007)
+- [x] T009 [US1] Implement payment methods fetch with retry, fixed labels, unknown-id disabled handling, and single-selection state in `Carrinho/Screens/CheckoutScreen.tsx` (depends T008)
+- [x] T010 [US1] Block checkout with empty cart and disable "Finalizar compra" until a known payment method is selected in `Carrinho/Screens/CheckoutScreen.tsx` (depends T009)
+- [x] T011 [US1] Add "Finalizar compra" action to the cart screen that navigates to `Checkout` in `Carrinho/Screens/CarrinhoScreen.tsx` (depends T004, T005)
+- [x] T012 [US1] Register the `Checkout` screen in `Carrinho/Navigation/AppNavigator.tsx` (depends T008, T011)
 
 **Checkpoint**: User Story 1 is fully functional and testable independently.
 
@@ -64,11 +64,11 @@
 
 ### Implementation for User Story 2
 
-- [ ] T013 [P] [US2] Build `ConfirmacaoCompraScreen` with purchase ID, items/quantities, total, payment label, status, cart-update notice, and "Voltar ao catálogo" in `Carrinho/Screens/ConfirmacaoCompraScreen.tsx` (depends T001, T002, T003)
-- [ ] T014 [US2] Implement purchase submission in `Carrinho/Screens/CheckoutScreen.tsx` with `finalizandoRef`, disabled button, `AbortController`, and `ErroCheckout` messages (depends T009, T010, T006)
-- [ ] T015 [US2] Call `limparCarrinho()` after success, treat `http_404` as already empty, and pass `carrinhoAtualizado` to confirmation in `Carrinho/Screens/CheckoutScreen.tsx` (depends T014, T007)
-- [ ] T016 [US2] Register `ConfirmacaoCompra` in `Carrinho/Navigation/AppNavigator.tsx` and wire `navigation.replace` from checkout (depends T013, T014)
-- [ ] T017 [US2] Implement "Voltar ao catálogo" with `navigation.reset` to `Catalogo` and retry pending cart cleanup in `Carrinho/Screens/ConfirmacaoCompraScreen.tsx` (depends T013, T015, T016)
+- [x] T013 [P] [US2] Build `ConfirmacaoCompraScreen` with purchase ID, items/quantities, total, payment label, status, cart-update notice, and "Voltar ao catálogo" in `Carrinho/Screens/ConfirmacaoCompraScreen.tsx` (depends T001, T002, T003)
+- [x] T014 [US2] Implement purchase submission in `Carrinho/Screens/CheckoutScreen.tsx` with `finalizandoRef`, disabled button, `AbortController`, and `ErroCheckout` messages (depends T009, T010, T006)
+- [x] T015 [US2] Call `limparCarrinho()` after success, treat `http_404` as already empty, and pass `carrinhoAtualizado` to confirmation in `Carrinho/Screens/CheckoutScreen.tsx` (depends T014, T007)
+- [x] T016 [US2] Register `ConfirmacaoCompra` in `Carrinho/Navigation/AppNavigator.tsx` and wire `navigation.replace` from checkout (depends T013, T014)
+- [x] T017 [US2] Implement "Voltar ao catálogo" with `navigation.reset` to `Catalogo` and retry pending cart cleanup in `Carrinho/Screens/ConfirmacaoCompraScreen.tsx` (depends T013, T015, T016)
 
 **Checkpoint**: User Stories 1 and 2 work together; the full purchase flow is functional.
 
@@ -82,11 +82,11 @@
 
 ### Implementation for User Story 3
 
-- [ ] T018 [US3] Implement snapshot comparison by `produtoId`, `quantidade`, and `total` before confirmation in `Carrinho/Screens/CheckoutScreen.tsx` (depends T014)
-- [ ] T019 [US3] Update the summary and require a new explicit confirmation when divergence is detected in `Carrinho/Screens/CheckoutScreen.tsx` (depends T018)
-- [ ] T020 [US3] Handle empty cart at confirmation time and clear an invalid payment selection in `Carrinho/Screens/CheckoutScreen.tsx` (depends T014)
-- [ ] T021 [US3] Ignore stale responses after logout/unmount using `AbortController` and session checks in `Carrinho/Screens/CheckoutScreen.tsx` (depends T014, T007)
-- [ ] T022 [US3] Verify auth, catalog, product details, and cart flows still work after checkout integration in `Carrinho/` (depends T017, T021)
+- [x] T018 [US3] Implement snapshot comparison by `produtoId`, `quantidade`, and `total` before confirmation in `Carrinho/Screens/CheckoutScreen.tsx` (depends T014)
+- [x] T019 [US3] Update the summary and require a new explicit confirmation when divergence is detected in `Carrinho/Screens/CheckoutScreen.tsx` (depends T018)
+- [x] T020 [US3] Handle empty cart at confirmation time and clear an invalid payment selection in `Carrinho/Screens/CheckoutScreen.tsx` (depends T014)
+- [x] T021 [US3] Ignore stale responses after logout/unmount using `AbortController` and session checks in `Carrinho/Screens/CheckoutScreen.tsx` (depends T014, T007)
+- [x] T022 [US3] Verify auth, catalog, product details, and cart flows still work after checkout integration in `Carrinho/` (depends T017, T021)
 
 **Checkpoint**: All user stories are independently functional and existing flows remain intact.
 
@@ -96,11 +96,11 @@
 
 **Purpose**: Contract confirmation, security review, typecheck, and full manual validation
 
-- [ ] T023 [P] Audit `Carrinho/Service/compras.ts` and `Carrinho/Constants/mensagensCheckout.ts` for sensitive data exposure and consistent Portuguese messages
-- [ ] T024 [P] Confirm `POST /compras` with a real test purchase and adjust `Carrinho/Service/compras.ts` payload/validation if the API differs
-- [ ] T025 Run `cd Carrinho; npm run typecheck` and fix all TypeScript errors
-- [ ] T026 Run all scenarios in `specs/005-checkout-compra/quickstart.md` on Expo Web and record results
-- [ ] T027 [P] Verify `Carrinho/package.json` has no new dependencies and no card/payment data is requested, stored, or displayed
+- [x] T023 [P] Audit `Carrinho/Service/compras.ts` and `Carrinho/Constants/mensagensCheckout.ts` for sensitive data exposure and consistent Portuguese messages
+- [x] T024 [P] Confirm `POST /compras` with a real test purchase and adjust `Carrinho/Service/compras.ts` payload/validation if the API differs
+- [x] T025 Run `cd Carrinho; npm run typecheck` and fix all TypeScript errors
+- [x] T026 Run all scenarios in `specs/005-checkout-compra/quickstart.md` on Expo Web and record results
+- [x] T027 [P] Verify `Carrinho/package.json` has no new dependencies and no card/payment data is requested, stored, or displayed
 
 ---
 
