@@ -44,7 +44,10 @@ Accept: application/json
 
 ## POST /compras
 
-**Status**: rota existente; corpo inferido e ainda não validado com uma compra real.
+**Status**: confirmado com uma compra real em 2026-11-08 (`201`). Requer carrinho do
+usuário com ao menos um item (`400` com carrinho vazio). Após o sucesso, a loja esvazia o
+servidor do carrinho; o `DELETE /carrinho/:usuarioId` do app continua válido (retorna `200`
+com carrinho vazio).
 
 **Request**
 
@@ -62,34 +65,37 @@ Accept: application/json
 }
 ```
 
-**Response 201/200 (esperado)**
+**Response 201 (confirmado)**
 
 ```json
 {
-  "id": "compra_123",
+  "id": 7,
   "usuarioId": "teste",
   "itens": [
     {
-      "produtoId": "1",
-      "nome": "Produto",
-      "preco": 1990,
-      "quantidade": 2,
-      "total": 3980
+      "produtoId": 1,
+      "nome": "Fone de ouvido Bluetooth",
+      "preco": 19990,
+      "imagem": "https://loja-api-wheat.vercel.app/imagens/1.jpg",
+      "quantidade": 1,
+      "subtotal": 19990
     }
   ],
-  "total": 3980,
+  "quantidadeTotal": 1,
+  "total": 19990,
   "formaPagamento": "pix",
   "status": "confirmada",
-  "criadaEm": "2026-11-04T12:00:00.000Z"
+  "criadaEm": "2026-11-08T18:07:37.791Z"
 }
 ```
 
 **Validação no app**
 
-- `id`, `usuarioId`, `status` e `criadaEm` são strings não vazias.
-- `total` é inteiro não negativo.
+- `id` é número finito (o exemplo antigo com `"compra_123"` estava errado).
+- `usuarioId`, `status` e `criadaEm` são strings não vazias.
+- `total` e `quantidadeTotal` são inteiros não negativos.
 - `formaPagamento` é `pix`, `cartao` ou `boleto`.
-- `itens` é um array válido de `ItemCarrinho`.
+- `itens` é um array válido de `ItemCarrinho` (com `imagem` e `subtotal`).
 - `status` aceita qualquer string; o app exibe o valor retornado.
 
 **Erros**

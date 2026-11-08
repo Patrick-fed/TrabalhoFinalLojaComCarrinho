@@ -82,11 +82,11 @@
 
 ### Implementation for User Story 3
 
-- [ ] T018 [US3] Implement snapshot comparison by `produtoId`, `quantidade`, and `total` before confirmation in `Carrinho/Screens/CheckoutScreen.tsx` (depends T014)
-- [ ] T019 [US3] Update the summary and require a new explicit confirmation when divergence is detected in `Carrinho/Screens/CheckoutScreen.tsx` (depends T018)
-- [ ] T020 [US3] Handle empty cart at confirmation time and clear an invalid payment selection in `Carrinho/Screens/CheckoutScreen.tsx` (depends T014)
-- [ ] T021 [US3] Ignore stale responses after logout/unmount using `AbortController` and session checks in `Carrinho/Screens/CheckoutScreen.tsx` (depends T014, T007)
-- [ ] T022 [US3] Verify auth, catalog, product details, and cart flows still work after checkout integration in `Carrinho/` (depends T017, T021)
+- [x] T018 [US3] Implement snapshot comparison by `produtoId`, `quantidade`, and `total` before confirmation in `Carrinho/Screens/CheckoutScreen.tsx` (depends T014)
+- [x] T019 [US3] Update the summary and require a new explicit confirmation when divergence is detected in `Carrinho/Screens/CheckoutScreen.tsx` (depends T018)
+- [x] T020 [US3] Handle empty cart at confirmation time and clear an invalid payment selection in `Carrinho/Screens/CheckoutScreen.tsx` (depends T014)
+- [x] T021 [US3] Ignore stale responses after logout/unmount using `AbortController` and session checks in `Carrinho/Screens/CheckoutScreen.tsx` (depends T014, T007)
+- [x] T022 [US3] Verify auth, catalog, product details, and cart flows still work after checkout integration in `Carrinho/` (depends T017, T021)
 
 **Checkpoint**: All user stories are independently functional and existing flows remain intact.
 
@@ -96,11 +96,11 @@
 
 **Purpose**: Contract confirmation, security review, typecheck, and full manual validation
 
-- [ ] T023 [P] Audit `Carrinho/Service/compras.ts` and `Carrinho/Constants/mensagensCheckout.ts` for sensitive data exposure and consistent Portuguese messages
-- [ ] T024 [P] Confirm `POST /compras` with a real test purchase and adjust `Carrinho/Service/compras.ts` payload/validation if the API differs
-- [ ] T025 Run `cd Carrinho; npm run typecheck` and fix all TypeScript errors
-- [ ] T026 Run all scenarios in `specs/005-checkout-compra/quickstart.md` on Expo Web and record results
-- [ ] T027 [P] Verify `Carrinho/package.json` has no new dependencies and no card/payment data is requested, stored, or displayed
+- [x] T023 [P] Audit `Carrinho/Service/compras.ts` and `Carrinho/Constants/mensagensCheckout.ts` for sensitive data exposure and consistent Portuguese messages
+- [x] T024 [P] Confirm `POST /compras` with a real test purchase and adjust `Carrinho/Service/compras.ts` payload/validation if the API differs
+- [x] T025 Run `cd Carrinho; npm run typecheck` and fix all TypeScript errors
+- [x] T026 Run all scenarios in `specs/005-checkout-compra/quickstart.md` on Expo Web and record results
+- [x] T027 [P] Verify `Carrinho/package.json` has no new dependencies and no card/payment data is requested, stored, or displayed
 
 ---
 
