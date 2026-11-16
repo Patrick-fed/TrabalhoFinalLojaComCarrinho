@@ -1,6 +1,6 @@
 import { useFocusEffect } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -15,11 +15,12 @@ import { CampoTexto } from "../Components/CampoTexto";
 import { CartaoProduto } from "../Components/CartaoProduto";
 import { MensagemErro } from "../Components/MensagemErro";
 import { SeletorCategorias } from "../Components/SeletorCategorias";
-import { CORES } from "../Constants/cores";
+import type { Paleta } from "../Constants/cores";
 import { MENSAGENS_CARRINHO } from "../Constants/mensagensCarrinho";
 import { MENSAGENS_CATALOGO } from "../Constants/mensagensCatalogo";
 import { useAuth } from "../Context/AuthContext";
 import { useCarrinho } from "../Context/CarrinhoContext";
+import { useTema } from "../Context/TemaContext";
 import { listarCategorias, listarProdutos } from "../Service/catalogo";
 import type { CategoriaDisponivel } from "../Types/catalogo";
 import type { AppStackParamList } from "../Types/navigation";
@@ -49,6 +50,23 @@ function Cabecalho({
   aoSair,
   aoAbrirCarrinho,
 }: CabecalhoProps) {
+  const { preferencia, tema, cores, alternarPreferencia } = useTema();
+  const estilos = useMemo(() => criarEstilos(cores), [cores]);
+
+  const rotuloTema =
+    preferencia === "sistema"
+      ? MENSAGENS_CATALOGO.temaSistema
+      : preferencia === "claro"
+        ? MENSAGENS_CATALOGO.temaClaro
+        : MENSAGENS_CATALOGO.temaEscuro;
+
+  const rotuloAcessivelTema =
+    preferencia === "sistema"
+      ? MENSAGENS_CATALOGO.temaAcessivelSistema
+      : preferencia === "claro"
+        ? MENSAGENS_CATALOGO.temaAcessivelClaro
+        : MENSAGENS_CATALOGO.temaAcessivelEscuro;
+
   return (
     <View style={estilos.cabecalho}>
       <View style={estilos.cabecalhoLinha}>
@@ -58,6 +76,19 @@ function Cabecalho({
             {email}
           </Text>
         </View>
+
+        <Pressable
+          accessibilityRole="switch"
+          accessibilityState={{ checked: tema === "escuro" }}
+          accessibilityLabel={rotuloAcessivelTema}
+          onPress={alternarPreferencia}
+          style={({ pressed }) => [
+            estilos.botaoTema,
+            pressed ? estilos.botaoTemaPressionado : null,
+          ]}
+        >
+          <Text style={estilos.textoBotaoTema}>{rotuloTema}</Text>
+        </Pressable>
 
         <Pressable
           accessibilityRole="button"
@@ -88,7 +119,7 @@ function Cabecalho({
           ]}
         >
           {saindo ? (
-            <ActivityIndicator color={CORES.primaria} size="small" />
+            <ActivityIndicator color={cores.primaria} size="small" />
           ) : (
             <Text style={estilos.textoBotaoSair}>Sair</Text>
           )}
@@ -107,6 +138,8 @@ function Cabecalho({
 export function CatalogoScreen({ navigation }: CatalogoScreenProps) {
   const { usuario, sair } = useAuth();
   const { carrinho, operacao, adicionarProduto } = useCarrinho();
+  const { cores } = useTema();
+  const estilos = useMemo(() => criarEstilos(cores), [cores]);
 
   const [busca, setBusca] = useState("");
   const [buscaAplicada, setBuscaAplicada] = useState("");
@@ -552,7 +585,7 @@ export function CatalogoScreen({ navigation }: CatalogoScreenProps) {
 
             {atualizando ? (
               <View style={estilos.indicadorAtualizacao}>
-                <ActivityIndicator color={CORES.primaria} size="small" />
+                <ActivityIndicator color={cores.primaria} size="small" />
                 <Text style={estilos.textoAtualizando}>
                   {MENSAGENS_CATALOGO.atualizando}
                 </Text>
@@ -572,14 +605,14 @@ export function CatalogoScreen({ navigation }: CatalogoScreenProps) {
   );
 }
 
-const estilos = StyleSheet.create({
+const criarEstilos = (cores: Paleta) => StyleSheet.create({
   container: {
-    backgroundColor: CORES.fundo,
+    backgroundColor: cores.fundo,
     flex: 1,
   },
   cabecalho: {
-    backgroundColor: CORES.branco,
-    borderBottomColor: CORES.borda,
+    backgroundColor: cores.branco,
+    borderBottomColor: cores.borda,
     borderBottomWidth: 1,
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -593,19 +626,40 @@ const estilos = StyleSheet.create({
     paddingRight: 12,
   },
   titulo: {
-    color: CORES.primaria,
+    color: cores.primaria,
     fontSize: 20,
     fontWeight: "700",
   },
   email: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 12,
     marginTop: 2,
+  },
+  botaoTema: {
+    alignItems: "center",
+    alignSelf: "center",
+    borderColor: cores.borda,
+    borderRadius: 8,
+    borderWidth: 1,
+    justifyContent: "center",
+    marginRight: 8,
+    minHeight: 40,
+    minWidth: 72,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+  },
+  botaoTemaPressionado: {
+    backgroundColor: cores.primariaClara,
+  },
+  textoBotaoTema: {
+    color: cores.texto,
+    fontSize: 13,
+    fontWeight: "600",
   },
   botaoSair: {
     alignItems: "center",
     alignSelf: "center",
-    borderColor: CORES.primaria,
+    borderColor: cores.primaria,
     borderRadius: 8,
     borderWidth: 1,
     justifyContent: "center",
@@ -615,17 +669,17 @@ const estilos = StyleSheet.create({
     paddingVertical: 8,
   },
   botaoSairPressionado: {
-    backgroundColor: CORES.primariaClara,
+    backgroundColor: cores.primariaClara,
   },
   textoBotaoSair: {
-    color: CORES.primaria,
+    color: cores.primaria,
     fontSize: 14,
     fontWeight: "700",
   },
   botaoCarrinho: {
     alignItems: "center",
     alignSelf: "center",
-    backgroundColor: CORES.primaria,
+    backgroundColor: cores.primaria,
     borderRadius: 8,
     flexDirection: "row",
     justifyContent: "center",
@@ -635,16 +689,16 @@ const estilos = StyleSheet.create({
     paddingVertical: 8,
   },
   botaoCarrinhoPressionado: {
-    backgroundColor: CORES.primariaEscura,
+    backgroundColor: cores.primariaEscura,
   },
   textoBotaoCarrinho: {
-    color: CORES.branco,
+    color: cores.branco,
     fontSize: 13,
     fontWeight: "700",
   },
   badgeCarrinho: {
     alignItems: "center",
-    backgroundColor: CORES.branco,
+    backgroundColor: cores.branco,
     borderRadius: 10,
     justifyContent: "center",
     marginLeft: 6,
@@ -653,13 +707,13 @@ const estilos = StyleSheet.create({
     paddingVertical: 1,
   },
   textoBadgeCarrinho: {
-    color: CORES.primaria,
+    color: cores.primaria,
     fontSize: 12,
     fontWeight: "700",
   },
   bannerSucesso: {
-    backgroundColor: CORES.primariaClara,
-    borderColor: CORES.sucesso,
+    backgroundColor: cores.primariaClara,
+    borderColor: cores.sucesso,
     borderRadius: 8,
     borderWidth: 1,
     marginBottom: 12,
@@ -667,7 +721,7 @@ const estilos = StyleSheet.create({
     paddingVertical: 10,
   },
   textoBannerSucesso: {
-    color: CORES.sucesso,
+    color: cores.sucesso,
     fontSize: 13,
     fontWeight: "600",
   },
@@ -696,7 +750,7 @@ const estilos = StyleSheet.create({
   },
   resumoFiltros: {
     alignItems: "center",
-    backgroundColor: CORES.primariaClara,
+    backgroundColor: cores.primariaClara,
     borderRadius: 8,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -705,13 +759,13 @@ const estilos = StyleSheet.create({
     paddingVertical: 10,
   },
   textoResumo: {
-    color: CORES.texto,
+    color: cores.texto,
     flex: 1,
     fontSize: 13,
     paddingRight: 12,
   },
   textoAcao: {
-    color: CORES.primaria,
+    color: cores.primaria,
     fontSize: 13,
     fontWeight: "700",
   },
@@ -721,7 +775,7 @@ const estilos = StyleSheet.create({
   botaoTentarNovamente: {
     alignItems: "center",
     alignSelf: "flex-start",
-    borderColor: CORES.primaria,
+    borderColor: cores.primaria,
     borderRadius: 8,
     borderWidth: 1,
     justifyContent: "center",
@@ -730,10 +784,10 @@ const estilos = StyleSheet.create({
     paddingVertical: 8,
   },
   botaoTentarNovamentePressionado: {
-    backgroundColor: CORES.primariaClara,
+    backgroundColor: cores.primariaClara,
   },
   textoBotaoTentarNovamente: {
-    color: CORES.primaria,
+    color: cores.primaria,
     fontSize: 13,
     fontWeight: "700",
   },
@@ -743,7 +797,7 @@ const estilos = StyleSheet.create({
     marginBottom: 12,
   },
   textoAtualizando: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 13,
     marginLeft: 8,
   },
@@ -756,7 +810,7 @@ const estilos = StyleSheet.create({
     paddingVertical: 40,
   },
   textoVazio: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 15,
     textAlign: "center",
   },

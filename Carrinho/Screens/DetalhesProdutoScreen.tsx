@@ -1,5 +1,5 @@
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -12,9 +12,10 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BotaoPrincipal } from "../Components/BotaoPrincipal";
 import { MensagemErro } from "../Components/MensagemErro";
-import { CORES } from "../Constants/cores";
+import type { Paleta } from "../Constants/cores";
 import { MENSAGENS_DETALHES_PRODUTO } from "../Constants/mensagensDetalhesProduto";
 import { useCarrinho } from "../Context/CarrinhoContext";
+import { useTema } from "../Context/TemaContext";
 import { buscarProdutoPorId } from "../Service/catalogo";
 import type { AppStackParamList } from "../Types/navigation";
 import type { Produto } from "../Types/types";
@@ -43,6 +44,8 @@ export function DetalhesProdutoScreen({
 }: DetalhesProdutoScreenProps) {
   const { produto: produtoDaRota } = route.params;
   const { carrinho, operacao, adicionarProduto } = useCarrinho();
+  const { cores } = useTema();
+  const estilos = useMemo(() => criarEstilos(cores), [cores]);
 
   const [produto, setProduto] = useState<Produto | null>(produtoDaRota);
   const [carregando, setCarregando] = useState(true);
@@ -216,7 +219,7 @@ export function DetalhesProdutoScreen({
         >
           {carregando ? (
             <View style={estilos.indicadorAtualizacao}>
-              <ActivityIndicator color={CORES.primaria} size="small" />
+              <ActivityIndicator color={cores.primaria} size="small" />
               <Text style={estilos.textoAtualizando}>
                 {MENSAGENS_DETALHES_PRODUTO.atualizando}
               </Text>
@@ -300,15 +303,15 @@ export function DetalhesProdutoScreen({
   );
 }
 
-const estilos = StyleSheet.create({
+const criarEstilos = (cores: Paleta) => StyleSheet.create({
   container: {
-    backgroundColor: CORES.fundo,
+    backgroundColor: cores.fundo,
     flex: 1,
   },
   cabecalho: {
     alignItems: "center",
-    backgroundColor: CORES.branco,
-    borderBottomColor: CORES.borda,
+    backgroundColor: cores.branco,
+    borderBottomColor: cores.borda,
     borderBottomWidth: 1,
     flexDirection: "row",
     minHeight: 56,
@@ -320,15 +323,15 @@ const estilos = StyleSheet.create({
     paddingVertical: 8,
   },
   botaoVoltarPressionado: {
-    backgroundColor: CORES.primariaClara,
+    backgroundColor: cores.primariaClara,
   },
   textoBotaoVoltar: {
-    color: CORES.primaria,
+    color: cores.primaria,
     fontSize: 15,
     fontWeight: "700",
   },
   tituloCabecalho: {
-    color: CORES.texto,
+    color: cores.texto,
     flex: 1,
     fontSize: 16,
     fontWeight: "700",
@@ -350,7 +353,7 @@ const estilos = StyleSheet.create({
     marginBottom: 12,
   },
   textoAtualizando: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 13,
     marginLeft: 8,
   },
@@ -359,7 +362,7 @@ const estilos = StyleSheet.create({
   },
   areaImagem: {
     aspectRatio: 1.4,
-    backgroundColor: CORES.primariaClara,
+    backgroundColor: cores.primariaClara,
     borderRadius: 12,
     marginBottom: 20,
     overflow: "hidden",
@@ -376,48 +379,48 @@ const estilos = StyleSheet.create({
     padding: 16,
   },
   textoSemImagem: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 14,
   },
   nome: {
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 26,
     fontWeight: "700",
     marginBottom: 8,
   },
   preco: {
-    color: CORES.primaria,
+    color: cores.primaria,
     fontSize: 28,
     fontWeight: "700",
     marginBottom: 16,
   },
   areaEstoque: {
-    backgroundColor: CORES.primariaClara,
+    backgroundColor: cores.primariaClara,
     borderRadius: 8,
     marginBottom: 20,
     paddingHorizontal: 12,
     paddingVertical: 10,
   },
   textoEstoque: {
-    color: CORES.primariaEscura,
+    color: cores.primariaEscura,
     fontSize: 14,
     fontWeight: "600",
   },
   rotuloDescricao: {
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 16,
     fontWeight: "700",
     marginBottom: 6,
   },
   descricao: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 15,
     lineHeight: 22,
     marginBottom: 20,
   },
   bannerSucesso: {
-    backgroundColor: CORES.primariaClara,
-    borderColor: CORES.sucesso,
+    backgroundColor: cores.primariaClara,
+    borderColor: cores.sucesso,
     borderRadius: 8,
     borderWidth: 1,
     marginBottom: 12,
@@ -425,7 +428,7 @@ const estilos = StyleSheet.create({
     paddingVertical: 10,
   },
   textoBannerSucesso: {
-    color: CORES.sucesso,
+    color: cores.sucesso,
     fontSize: 13,
     fontWeight: "600",
   },

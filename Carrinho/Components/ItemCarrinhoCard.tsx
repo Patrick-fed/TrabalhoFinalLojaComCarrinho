@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -7,8 +7,9 @@ import {
   Text,
   View,
 } from "react-native";
-import { CORES } from "../Constants/cores";
+import type { Paleta } from "../Constants/cores";
 import { MENSAGENS_CARRINHO } from "../Constants/mensagensCarrinho";
+import { useTema } from "../Context/TemaContext";
 import type { OperacaoCarrinho } from "../Types/carrinho";
 import type { ItemCarrinho } from "../Types/types";
 import { formatarPrecoCentavos } from "../Utils/formatacao";
@@ -56,6 +57,8 @@ export function ItemCarrinhoCard({
   aoDiminuir,
   aoRemover,
 }: ItemCarrinhoCardProps) {
+  const { cores } = useTema();
+  const estilos = useMemo(() => criarEstilos(cores), [cores]);
   const [imagemFalhou, setImagemFalhou] = useState(false);
 
   const operacaoNoItem =
@@ -211,7 +214,7 @@ export function ItemCarrinhoCard({
 
       {operacaoNoItem ? (
         <View style={estilos.indicadorOperacao}>
-          <ActivityIndicator color={CORES.primaria} size="small" />
+          <ActivityIndicator color={cores.primaria} size="small" />
           <Text style={estilos.textoOperacao}>Atualizando...</Text>
         </View>
       ) : null}
@@ -219,10 +222,10 @@ export function ItemCarrinhoCard({
   );
 }
 
-const estilos = StyleSheet.create({
+const criarEstilos = (cores: Paleta) => StyleSheet.create({
   cartao: {
-    backgroundColor: CORES.branco,
-    borderColor: CORES.borda,
+    backgroundColor: cores.branco,
+    borderColor: cores.borda,
     borderRadius: 12,
     borderWidth: 1,
     padding: 12,
@@ -231,7 +234,7 @@ const estilos = StyleSheet.create({
     flexDirection: "row",
   },
   areaImagem: {
-    backgroundColor: CORES.primariaClara,
+    backgroundColor: cores.primariaClara,
     borderRadius: 8,
     height: 84,
     overflow: "hidden",
@@ -248,7 +251,7 @@ const estilos = StyleSheet.create({
     padding: 6,
   },
   textoSemImagem: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 11,
     textAlign: "center",
   },
@@ -259,22 +262,22 @@ const estilos = StyleSheet.create({
     paddingVertical: 2,
   },
   nome: {
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 16,
     fontWeight: "600",
   },
   precoUnitario: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 13,
     marginTop: 4,
   },
   estoque: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 12,
     marginTop: 4,
   },
   estoqueCritico: {
-    color: CORES.erro,
+    color: cores.erro,
     fontWeight: "600",
   },
   linhaSubtotal: {
@@ -284,11 +287,11 @@ const estilos = StyleSheet.create({
     marginTop: 6,
   },
   labelSubtotal: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 12,
   },
   subtotal: {
-    color: CORES.primaria,
+    color: cores.primaria,
     fontSize: 16,
     fontWeight: "700",
   },
@@ -304,7 +307,7 @@ const estilos = StyleSheet.create({
   },
   botaoControle: {
     alignItems: "center",
-    borderColor: CORES.borda,
+    borderColor: cores.borda,
     borderRadius: 8,
     borderWidth: 1,
     height: 36,
@@ -312,33 +315,33 @@ const estilos = StyleSheet.create({
     width: 36,
   },
   botaoControlePressionado: {
-    backgroundColor: CORES.primariaClara,
+    backgroundColor: cores.primariaClara,
   },
   textoControle: {
-    color: CORES.primaria,
+    color: cores.primaria,
     fontSize: 22,
     fontWeight: "700",
     lineHeight: 24,
   },
   quantidade: {
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 16,
     fontWeight: "700",
     minWidth: 36,
     textAlign: "center",
   },
   botaoRemover: {
-    borderColor: CORES.erro,
+    borderColor: cores.erro,
     borderRadius: 8,
     borderWidth: 1,
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
   botaoRemoverPressionado: {
-    backgroundColor: CORES.erroFundo,
+    backgroundColor: cores.erroFundo,
   },
   textoRemover: {
-    color: CORES.erro,
+    color: cores.erro,
     fontSize: 13,
     fontWeight: "700",
   },
@@ -352,7 +355,7 @@ const estilos = StyleSheet.create({
     marginTop: 12,
   },
   valorQuantidadeLeitura: {
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 16,
     fontWeight: "700",
   },
@@ -362,7 +365,7 @@ const estilos = StyleSheet.create({
     marginTop: 10,
   },
   textoOperacao: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 12,
     marginLeft: 8,
   },

@@ -1,5 +1,5 @@
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -13,8 +13,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { BotaoPrincipal } from "../Components/BotaoPrincipal";
 import { CampoTexto } from "../Components/CampoTexto";
 import { MensagemErro } from "../Components/MensagemErro";
-import { CORES } from "../Constants/cores";
+import type { Paleta } from "../Constants/cores";
 import { useAuth } from "../Context/AuthContext";
+import { useTema } from "../Context/TemaContext";
 import type { AuthStackParamList } from "../Types/navigation";
 import { obterMensagemDeErro } from "../Utils/erros";
 import { temErros, validarLogin } from "../Utils/validacoes";
@@ -24,6 +25,8 @@ type LoginScreenProps = NativeStackScreenProps<AuthStackParamList, "Login">;
 
 export function LoginScreen({ navigation }: LoginScreenProps) {
   const { entrar } = useAuth();
+  const { cores } = useTema();
+  const estilos = useMemo(() => criarEstilos(cores), [cores]);
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [erros, setErros] = useState<ErrosFormulario>({});
@@ -130,9 +133,9 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
   );
 }
 
-const estilos = StyleSheet.create({
+const criarEstilos = (cores: Paleta) => StyleSheet.create({
   container: {
-    backgroundColor: CORES.fundo,
+    backgroundColor: cores.fundo,
     flex: 1,
   },
   conteudo: {
@@ -142,8 +145,8 @@ const estilos = StyleSheet.create({
   },
   cartao: {
     alignSelf: "center",
-    backgroundColor: CORES.branco,
-    borderColor: CORES.borda,
+    backgroundColor: cores.branco,
+    borderColor: cores.borda,
     borderRadius: 12,
     borderWidth: 1,
     maxWidth: 480,
@@ -151,13 +154,13 @@ const estilos = StyleSheet.create({
     width: "100%",
   },
   titulo: {
-    color: CORES.primaria,
+    color: cores.primaria,
     fontSize: 26,
     fontWeight: "700",
     marginBottom: 4,
   },
   subtitulo: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 14,
     marginBottom: 20,
   },
@@ -167,7 +170,7 @@ const estilos = StyleSheet.create({
     padding: 8,
   },
   textoLink: {
-    color: CORES.primaria,
+    color: cores.primaria,
     fontSize: 14,
     fontWeight: "600",
   },

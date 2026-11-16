@@ -12,6 +12,12 @@ export const MENSAGENS_CATALOGO = {
   limparFiltros: "Limpar filtros",
   buscaAtiva: "Busca ativa",
   categoriaAtiva: "Categoria ativa",
+  temaSistema: "Auto",
+  temaClaro: "Claro",
+  temaEscuro: "Escuro",
+  temaAcessivelSistema: "Alternar tema. Tema atual: seguindo o aparelho.",
+  temaAcessivelClaro: "Alternar tema. Tema atual: claro.",
+  temaAcessivelEscuro: "Alternar tema. Tema atual: escuro.",
 } as const;
 
 export const MENSAGENS_ERRO_API = {

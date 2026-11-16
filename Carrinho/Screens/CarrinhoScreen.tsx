@@ -1,5 +1,5 @@
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -13,9 +13,10 @@ import { BotaoPrincipal } from "../Components/BotaoPrincipal";
 import { ItemCarrinhoCard } from "../Components/ItemCarrinhoCard";
 import { MensagemErro } from "../Components/MensagemErro";
 import { ModalConfirmacao } from "../Components/ModalConfirmacao";
-import { CORES } from "../Constants/cores";
+import type { Paleta } from "../Constants/cores";
 import { MENSAGENS_CARRINHO } from "../Constants/mensagensCarrinho";
 import { useCarrinho } from "../Context/CarrinhoContext";
+import { useTema } from "../Context/TemaContext";
 import { listarProdutos } from "../Service/catalogo";
 import type { OperacaoCarrinho } from "../Types/carrinho";
 import type { AppStackParamList } from "../Types/navigation";
@@ -41,6 +42,8 @@ function Cabecalho({
   aoVoltar,
   aoLimpar,
 }: CabecalhoProps) {
+  const { cores } = useTema();
+  const estilos = useMemo(() => criarEstilos(cores), [cores]);
   const podeLimpar = quantidadeItens > 0 && operacao === null;
 
   return (
@@ -98,6 +101,8 @@ export function CarrinhoScreen({ navigation }: CarrinhoScreenProps) {
     removerItem,
     limparCarrinho,
   } = useCarrinho();
+  const { cores } = useTema();
+  const estilos = useMemo(() => criarEstilos(cores), [cores]);
 
   const [erroOperacao, setErroOperacao] = useState<string | null>(null);
   const [modalLimpezaVisivel, setModalLimpezaVisivel] = useState(false);
@@ -245,7 +250,7 @@ export function CarrinhoScreen({ navigation }: CarrinhoScreenProps) {
             </>
           ) : (
             <>
-              <ActivityIndicator color={CORES.primaria} size="large" />
+              <ActivityIndicator color={cores.primaria} size="large" />
               <Text style={estilos.textoCarregando}>
                 {MENSAGENS_CARRINHO.carregando}
               </Text>
@@ -287,7 +292,7 @@ export function CarrinhoScreen({ navigation }: CarrinhoScreenProps) {
 
             {carregando ? (
               <View style={estilos.indicadorAtualizacao}>
-                <ActivityIndicator color={CORES.primaria} size="small" />
+                <ActivityIndicator color={cores.primaria} size="small" />
                 <Text style={estilos.textoAtualizando}>
                   {MENSAGENS_CARRINHO.carregando}
                 </Text>
@@ -357,15 +362,15 @@ export function CarrinhoScreen({ navigation }: CarrinhoScreenProps) {
   );
 }
 
-const estilos = StyleSheet.create({
+const criarEstilos = (cores: Paleta) => StyleSheet.create({
   container: {
-    backgroundColor: CORES.fundo,
+    backgroundColor: cores.fundo,
     flex: 1,
   },
   cabecalho: {
     alignItems: "center",
-    backgroundColor: CORES.branco,
-    borderBottomColor: CORES.borda,
+    backgroundColor: cores.branco,
+    borderBottomColor: cores.borda,
     borderBottomWidth: 1,
     flexDirection: "row",
     minHeight: 56,
@@ -380,24 +385,24 @@ const estilos = StyleSheet.create({
     paddingVertical: 8,
   },
   botaoCabecalhoPressionado: {
-    backgroundColor: CORES.primariaClara,
+    backgroundColor: cores.primariaClara,
   },
   botaoCabecalhoDesabilitado: {
     opacity: 0.45,
   },
   textoBotaoCabecalho: {
-    color: CORES.primaria,
+    color: cores.primaria,
     fontSize: 15,
     fontWeight: "700",
   },
   textoBotaoLimpar: {
-    color: CORES.erro,
+    color: cores.erro,
     fontSize: 13,
     fontWeight: "700",
     textAlign: "right",
   },
   tituloCabecalho: {
-    color: CORES.texto,
+    color: cores.texto,
     flex: 1,
     fontSize: 18,
     fontWeight: "700",
@@ -420,7 +425,7 @@ const estilos = StyleSheet.create({
     marginBottom: 12,
   },
   textoAtualizando: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 13,
     marginLeft: 8,
   },
@@ -430,7 +435,7 @@ const estilos = StyleSheet.create({
     padding: 24,
   },
   textoCarregando: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 16,
     marginTop: 12,
     textAlign: "center",
@@ -441,7 +446,7 @@ const estilos = StyleSheet.create({
     paddingVertical: 32,
   },
   textoVazio: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 16,
     marginBottom: 20,
     textAlign: "center",
@@ -451,8 +456,8 @@ const estilos = StyleSheet.create({
     width: "100%",
   },
   resumo: {
-    backgroundColor: CORES.branco,
-    borderColor: CORES.borda,
+    backgroundColor: cores.branco,
+    borderColor: cores.borda,
     borderRadius: 12,
     borderWidth: 1,
     marginTop: 16,
@@ -465,16 +470,16 @@ const estilos = StyleSheet.create({
     marginBottom: 8,
   },
   labelResumo: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 14,
   },
   valorResumo: {
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 16,
     fontWeight: "700",
   },
   totalResumo: {
-    color: CORES.primaria,
+    color: cores.primaria,
     fontSize: 22,
     fontWeight: "700",
   },

@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
   ActivityIndicator,
   Pressable,
@@ -6,8 +7,9 @@ import {
   Text,
   View,
 } from "react-native";
-import { CORES } from "../Constants/cores";
+import type { Paleta } from "../Constants/cores";
 import { MENSAGENS_CATALOGO } from "../Constants/mensagensCatalogo";
+import { useTema } from "../Context/TemaContext";
 import type { CategoriaDisponivel } from "../Types/catalogo";
 import type { Categoria } from "../Types/types";
 import { MensagemErro } from "./MensagemErro";
@@ -34,6 +36,9 @@ function ChipCategoria({
   desabilitado,
   aoPressionar,
 }: ChipCategoriaProps) {
+  const { cores } = useTema();
+  const estilos = useMemo(() => criarEstilos(cores), [cores]);
+
   return (
     <Pressable
       accessibilityRole="button"
@@ -68,6 +73,8 @@ export function SeletorCategorias({
   erro = null,
   aoTentarNovamente,
 }: SeletorCategoriasProps) {
+  const { cores } = useTema();
+  const estilos = useMemo(() => criarEstilos(cores), [cores]);
   const semCategorias = categorias.length === 0;
 
   return (
@@ -89,7 +96,7 @@ export function SeletorCategorias({
               ]}
             >
               {carregando ? (
-                <ActivityIndicator color={CORES.primaria} size="small" />
+                <ActivityIndicator color={cores.primaria} size="small" />
               ) : (
                 <Text style={estilos.textoBotao}>
                   {MENSAGENS_CATALOGO.tentarNovamente}
@@ -102,7 +109,7 @@ export function SeletorCategorias({
 
       {carregando && semCategorias ? (
         <View style={estilos.carregando}>
-          <ActivityIndicator color={CORES.primaria} size="small" />
+          <ActivityIndicator color={cores.primaria} size="small" />
           <Text style={estilos.textoCarregando}>Carregando categorias...</Text>
         </View>
       ) : null}
@@ -139,12 +146,12 @@ export function SeletorCategorias({
   );
 }
 
-const estilos = StyleSheet.create({
+const criarEstilos = (cores: Paleta) => StyleSheet.create({
   container: {
     marginBottom: 16,
   },
   label: {
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 14,
     fontWeight: "600",
     marginBottom: 8,
@@ -153,8 +160,8 @@ const estilos = StyleSheet.create({
     paddingRight: 8,
   },
   chip: {
-    backgroundColor: CORES.branco,
-    borderColor: CORES.borda,
+    backgroundColor: cores.branco,
+    borderColor: cores.borda,
     borderRadius: 20,
     borderWidth: 1,
     marginRight: 8,
@@ -162,22 +169,22 @@ const estilos = StyleSheet.create({
     paddingVertical: 8,
   },
   chipSelecionado: {
-    backgroundColor: CORES.primaria,
-    borderColor: CORES.primaria,
+    backgroundColor: cores.primaria,
+    borderColor: cores.primaria,
   },
   chipDesabilitado: {
     opacity: 0.6,
   },
   chipPressionado: {
-    backgroundColor: CORES.primariaClara,
+    backgroundColor: cores.primariaClara,
   },
   textoChip: {
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 13,
     fontWeight: "600",
   },
   textoChipSelecionado: {
-    color: CORES.branco,
+    color: cores.branco,
   },
   areaErro: {
     marginBottom: 8,
@@ -185,7 +192,7 @@ const estilos = StyleSheet.create({
   botaoTentarNovamente: {
     alignItems: "center",
     alignSelf: "flex-start",
-    borderColor: CORES.primaria,
+    borderColor: cores.primaria,
     borderRadius: 8,
     borderWidth: 1,
     minHeight: 40,
@@ -194,10 +201,10 @@ const estilos = StyleSheet.create({
     paddingVertical: 8,
   },
   botaoPressionado: {
-    backgroundColor: CORES.primariaClara,
+    backgroundColor: cores.primariaClara,
   },
   textoBotao: {
-    color: CORES.primaria,
+    color: cores.primaria,
     fontSize: 13,
     fontWeight: "700",
   },
@@ -207,12 +214,12 @@ const estilos = StyleSheet.create({
     paddingVertical: 8,
   },
   textoCarregando: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 13,
     marginLeft: 8,
   },
   aviso: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 13,
     paddingVertical: 8,
   },

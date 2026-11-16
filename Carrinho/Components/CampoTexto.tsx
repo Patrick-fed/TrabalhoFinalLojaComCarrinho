@@ -1,6 +1,8 @@
+import { useMemo } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import type { TextInputProps } from "react-native";
-import { CORES } from "../Constants/cores";
+import type { Paleta } from "../Constants/cores";
+import { useTema } from "../Context/TemaContext";
 
 type CampoTextoProps = {
   label: string;
@@ -31,6 +33,9 @@ export function CampoTexto({
   aoEnviar,
   editavel = true,
 }: CampoTextoProps) {
+  const { cores } = useTema();
+  const estilos = useMemo(() => criarEstilos(cores), [cores]);
+
   return (
     <View style={estilos.container}>
       <Text style={estilos.label}>{label}</Text>
@@ -43,7 +48,7 @@ export function CampoTexto({
         value={valor}
         onChangeText={aoMudar}
         placeholder={placeholder}
-        placeholderTextColor={CORES.textoSecundario}
+        placeholderTextColor={cores.textoSecundario}
         secureTextEntry={seguro}
         keyboardType={tipoTeclado}
         autoCapitalize={autoCapitalize}
@@ -59,34 +64,34 @@ export function CampoTexto({
   );
 }
 
-const estilos = StyleSheet.create({
+const criarEstilos = (cores: Paleta) => StyleSheet.create({
   container: {
     marginBottom: 16,
   },
   label: {
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 14,
     fontWeight: "600",
     marginBottom: 6,
   },
   input: {
-    backgroundColor: CORES.branco,
-    borderColor: CORES.borda,
+    backgroundColor: cores.branco,
+    borderColor: cores.borda,
     borderRadius: 8,
     borderWidth: 1,
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 16,
     paddingHorizontal: 14,
     paddingVertical: 12,
   },
   inputComErro: {
-    borderColor: CORES.erro,
+    borderColor: cores.erro,
   },
   inputDesabilitado: {
-    backgroundColor: CORES.primariaClara,
+    backgroundColor: cores.primariaClara,
   },
   erro: {
-    color: CORES.erro,
+    color: cores.erro,
     fontSize: 13,
     marginTop: 4,
   },

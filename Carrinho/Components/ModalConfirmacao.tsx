@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
   ActivityIndicator,
   Modal,
@@ -6,7 +7,8 @@ import {
   Text,
   View,
 } from "react-native";
-import { CORES } from "../Constants/cores";
+import type { Paleta } from "../Constants/cores";
+import { useTema } from "../Context/TemaContext";
 
 type ModalConfirmacaoProps = {
   visivel: boolean;
@@ -29,6 +31,9 @@ export function ModalConfirmacao({
   aoCancelar,
   carregando = false,
 }: ModalConfirmacaoProps) {
+  const { cores } = useTema();
+  const estilos = useMemo(() => criarEstilos(cores), [cores]);
+
   return (
     <Modal
       animationType="fade"
@@ -78,7 +83,7 @@ export function ModalConfirmacao({
               ]}
             >
               {carregando ? (
-                <ActivityIndicator color={CORES.branco} size="small" />
+                <ActivityIndicator color={cores.branco} size="small" />
               ) : (
                 <Text style={estilos.textoConfirmar}>{textoConfirmar}</Text>
               )}
@@ -90,7 +95,7 @@ export function ModalConfirmacao({
   );
 }
 
-const estilos = StyleSheet.create({
+const criarEstilos = (cores: Paleta) => StyleSheet.create({
   fundo: {
     alignItems: "center",
     backgroundColor: "rgba(16, 32, 48, 0.55)",
@@ -99,20 +104,20 @@ const estilos = StyleSheet.create({
     padding: 24,
   },
   caixa: {
-    backgroundColor: CORES.branco,
+    backgroundColor: cores.branco,
     borderRadius: 12,
     maxWidth: 420,
     padding: 20,
     width: "100%",
   },
   titulo: {
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 18,
     fontWeight: "700",
     marginBottom: 8,
   },
   mensagem: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 14,
     lineHeight: 20,
     marginBottom: 20,
@@ -122,7 +127,7 @@ const estilos = StyleSheet.create({
     justifyContent: "flex-end",
   },
   botaoCancelar: {
-    borderColor: CORES.borda,
+    borderColor: cores.borda,
     borderRadius: 8,
     borderWidth: 1,
     marginRight: 8,
@@ -131,16 +136,16 @@ const estilos = StyleSheet.create({
     paddingVertical: 10,
   },
   botaoCancelarPressionado: {
-    backgroundColor: CORES.primariaClara,
+    backgroundColor: cores.primariaClara,
   },
   textoCancelar: {
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 14,
     fontWeight: "600",
   },
   botaoConfirmar: {
     alignItems: "center",
-    backgroundColor: CORES.erro,
+    backgroundColor: cores.erro,
     borderRadius: 8,
     justifyContent: "center",
     minHeight: 42,
@@ -152,7 +157,7 @@ const estilos = StyleSheet.create({
     opacity: 0.85,
   },
   textoConfirmar: {
-    color: CORES.branco,
+    color: cores.branco,
     fontSize: 14,
     fontWeight: "700",
   },

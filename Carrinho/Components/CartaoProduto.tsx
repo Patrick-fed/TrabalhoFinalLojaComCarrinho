@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -7,8 +7,9 @@ import {
   Text,
   View,
 } from "react-native";
-import { CORES } from "../Constants/cores";
+import type { Paleta } from "../Constants/cores";
 import { MENSAGENS_CARRINHO } from "../Constants/mensagensCarrinho";
+import { useTema } from "../Context/TemaContext";
 import type { Produto } from "../Types/types";
 import { formatarPrecoCentavos } from "../Utils/formatacao";
 
@@ -31,6 +32,8 @@ export function CartaoProduto({
   adicaoDesabilitada = false,
   desabilitado = false,
 }: CartaoProdutoProps) {
+  const { cores } = useTema();
+  const estilos = useMemo(() => criarEstilos(cores), [cores]);
   const [imagemFalhou, setImagemFalhou] = useState(false);
 
   const precoFormatado = formatarPrecoCentavos(produto.preco);
@@ -117,7 +120,7 @@ export function CartaoProduto({
         ]}
       >
         {adicionando ? (
-          <ActivityIndicator color={CORES.branco} size="small" />
+          <ActivityIndicator color={cores.branco} size="small" />
         ) : (
           <Text style={estilos.textoBotaoAdicionar}>{rotuloAcao}</Text>
         )}
@@ -126,10 +129,10 @@ export function CartaoProduto({
   );
 }
 
-const estilos = StyleSheet.create({
+const criarEstilos = (cores: Paleta) => StyleSheet.create({
   cartao: {
-    backgroundColor: CORES.branco,
-    borderColor: CORES.borda,
+    backgroundColor: cores.branco,
+    borderColor: cores.borda,
     borderRadius: 12,
     borderWidth: 1,
     padding: 12,
@@ -142,10 +145,10 @@ const estilos = StyleSheet.create({
     flexDirection: "row",
   },
   areaPrincipalPressionada: {
-    backgroundColor: CORES.primariaClara,
+    backgroundColor: cores.primariaClara,
   },
   areaImagem: {
-    backgroundColor: CORES.primariaClara,
+    backgroundColor: cores.primariaClara,
     borderRadius: 8,
     height: 96,
     overflow: "hidden",
@@ -162,7 +165,7 @@ const estilos = StyleSheet.create({
     padding: 6,
   },
   textoSemImagem: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 11,
     textAlign: "center",
   },
@@ -173,28 +176,28 @@ const estilos = StyleSheet.create({
     paddingVertical: 4,
   },
   nome: {
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 16,
     fontWeight: "600",
   },
   estoque: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 12,
     marginTop: 2,
   },
   estoqueEsgotado: {
-    color: CORES.erro,
+    color: cores.erro,
     fontWeight: "600",
   },
   preco: {
-    color: CORES.primaria,
+    color: cores.primaria,
     fontSize: 18,
     fontWeight: "700",
     marginTop: 8,
   },
   botaoAdicionar: {
     alignItems: "center",
-    backgroundColor: CORES.primaria,
+    backgroundColor: cores.primaria,
     borderRadius: 8,
     justifyContent: "center",
     marginTop: 12,
@@ -203,18 +206,18 @@ const estilos = StyleSheet.create({
     paddingVertical: 10,
   },
   botaoAdicionarPressionado: {
-    backgroundColor: CORES.primariaEscura,
+    backgroundColor: cores.primariaEscura,
   },
   botaoAdicionarDesabilitado: {
-    backgroundColor: CORES.textoSecundario,
+    backgroundColor: cores.textoSecundario,
     opacity: 0.7,
   },
   botaoEsgotado: {
-    backgroundColor: CORES.textoSecundario,
+    backgroundColor: cores.textoSecundario,
     opacity: 0.7,
   },
   textoBotaoAdicionar: {
-    color: CORES.branco,
+    color: cores.branco,
     fontSize: 14,
     fontWeight: "700",
   },

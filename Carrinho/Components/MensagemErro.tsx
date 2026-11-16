@@ -1,11 +1,16 @@
+import { useMemo } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { CORES } from "../Constants/cores";
+import type { Paleta } from "../Constants/cores";
+import { useTema } from "../Context/TemaContext";
 
 type MensagemErroProps = {
   mensagem?: string | null;
 };
 
 export function MensagemErro({ mensagem }: MensagemErroProps) {
+  const { cores } = useTema();
+  const estilos = useMemo(() => criarEstilos(cores), [cores]);
+
   if (!mensagem) {
     return null;
   }
@@ -17,10 +22,10 @@ export function MensagemErro({ mensagem }: MensagemErroProps) {
   );
 }
 
-const estilos = StyleSheet.create({
+const criarEstilos = (cores: Paleta) => StyleSheet.create({
   container: {
-    backgroundColor: CORES.erroFundo,
-    borderColor: CORES.erro,
+    backgroundColor: cores.erroFundo,
+    borderColor: cores.erro,
     borderRadius: 8,
     borderWidth: 1,
     marginBottom: 16,
@@ -28,7 +33,7 @@ const estilos = StyleSheet.create({
     paddingVertical: 10,
   },
   texto: {
-    color: CORES.erro,
+    color: cores.erro,
     fontSize: 14,
   },
 });

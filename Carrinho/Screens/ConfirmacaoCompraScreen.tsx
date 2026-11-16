@@ -1,5 +1,5 @@
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -9,13 +9,14 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BotaoPrincipal } from "../Components/BotaoPrincipal";
 import { MensagemErro } from "../Components/MensagemErro";
-import { CORES } from "../Constants/cores";
+import type { Paleta } from "../Constants/cores";
 import {
   MENSAGENS_CHECKOUT,
   rotuloFormaPagamento,
 } from "../Constants/mensagensCheckout";
 import { MENSAGENS_CARRINHO } from "../Constants/mensagensCarrinho";
 import { useCarrinho } from "../Context/CarrinhoContext";
+import { useTema } from "../Context/TemaContext";
 import type { AppStackParamList } from "../Types/navigation";
 import { formatarPrecoCentavos } from "../Utils/formatacao";
 
@@ -30,6 +31,8 @@ export function ConfirmacaoCompraScreen({
 }: ConfirmacaoCompraScreenProps) {
   const { compra, carrinhoAtualizado } = route.params;
   const { limparCarrinho } = useCarrinho();
+  const { cores } = useTema();
+  const estilos = useMemo(() => criarEstilos(cores), [cores]);
 
   const [atualizandoCarrinho, setAtualizandoCarrinho] = useState(false);
   const montadoRef = useRef(true);
@@ -193,9 +196,9 @@ export function ConfirmacaoCompraScreen({
   );
 }
 
-const estilos = StyleSheet.create({
+const criarEstilos = (cores: Paleta) => StyleSheet.create({
   container: {
-    backgroundColor: CORES.fundo,
+    backgroundColor: cores.fundo,
     flex: 1,
   },
   conteudo: {
@@ -210,8 +213,8 @@ const estilos = StyleSheet.create({
   selo: {
     alignItems: "center",
     alignSelf: "center",
-    backgroundColor: CORES.primariaClara,
-    borderColor: CORES.primaria,
+    backgroundColor: cores.primariaClara,
+    borderColor: cores.primaria,
     borderRadius: 36,
     borderWidth: 2,
     height: 72,
@@ -220,20 +223,20 @@ const estilos = StyleSheet.create({
     width: 72,
   },
   seloTexto: {
-    color: CORES.primaria,
+    color: cores.primaria,
     fontSize: 34,
     fontWeight: "700",
   },
   titulo: {
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 24,
     fontWeight: "700",
     marginBottom: 20,
     textAlign: "center",
   },
   cartao: {
-    backgroundColor: CORES.branco,
-    borderColor: CORES.borda,
+    backgroundColor: cores.branco,
+    borderColor: cores.borda,
     borderRadius: 12,
     borderWidth: 1,
     padding: 16,
@@ -245,22 +248,22 @@ const estilos = StyleSheet.create({
     marginBottom: 10,
   },
   label: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 14,
   },
   valor: {
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 15,
     fontWeight: "600",
   },
   divisor: {
-    backgroundColor: CORES.borda,
+    backgroundColor: cores.borda,
     height: 1,
     marginBottom: 12,
     marginTop: 4,
   },
   subtitulo: {
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 14,
     fontWeight: "700",
     marginBottom: 10,
@@ -276,40 +279,40 @@ const estilos = StyleSheet.create({
     paddingRight: 12,
   },
   nomeItem: {
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 15,
     fontWeight: "600",
   },
   quantidadeItem: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 13,
     marginTop: 2,
   },
   subtotalItem: {
-    color: CORES.primaria,
+    color: cores.primaria,
     fontSize: 15,
     fontWeight: "700",
   },
   labelTotal: {
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 16,
     fontWeight: "700",
   },
   total: {
-    color: CORES.primaria,
+    color: cores.primaria,
     fontSize: 22,
     fontWeight: "700",
   },
   aviso: {
-    backgroundColor: CORES.primariaClara,
-    borderColor: CORES.primaria,
+    backgroundColor: cores.primariaClara,
+    borderColor: cores.primaria,
     borderRadius: 12,
     borderWidth: 1,
     marginTop: 16,
     padding: 16,
   },
   textoAviso: {
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 14,
     textAlign: "center",
   },

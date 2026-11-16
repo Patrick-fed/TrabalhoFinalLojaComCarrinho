@@ -1,10 +1,12 @@
+import { useMemo } from "react";
 import {
   ActivityIndicator,
   Pressable,
   StyleSheet,
   Text,
 } from "react-native";
-import { CORES } from "../Constants/cores";
+import type { Paleta } from "../Constants/cores";
+import { useTema } from "../Context/TemaContext";
 
 type BotaoPrincipalProps = {
   titulo: string;
@@ -19,6 +21,8 @@ export function BotaoPrincipal({
   carregando = false,
   desabilitado = false,
 }: BotaoPrincipalProps) {
+  const { cores } = useTema();
+  const estilos = useMemo(() => criarEstilos(cores), [cores]);
   const inativo = desabilitado || carregando;
 
   return (
@@ -34,7 +38,7 @@ export function BotaoPrincipal({
       ]}
     >
       {carregando ? (
-        <ActivityIndicator color={CORES.branco} />
+        <ActivityIndicator color={cores.branco} />
       ) : (
         <Text style={estilos.texto}>{titulo}</Text>
       )}
@@ -42,10 +46,10 @@ export function BotaoPrincipal({
   );
 }
 
-const estilos = StyleSheet.create({
+const criarEstilos = (cores: Paleta) => StyleSheet.create({
   botao: {
     alignItems: "center",
-    backgroundColor: CORES.primaria,
+    backgroundColor: cores.primaria,
     borderRadius: 8,
     justifyContent: "center",
     minHeight: 48,
@@ -53,14 +57,14 @@ const estilos = StyleSheet.create({
     paddingVertical: 12,
   },
   botaoDesabilitado: {
-    backgroundColor: CORES.textoSecundario,
+    backgroundColor: cores.textoSecundario,
     opacity: 0.7,
   },
   botaoPressionado: {
-    backgroundColor: CORES.primariaEscura,
+    backgroundColor: cores.primariaEscura,
   },
   texto: {
-    color: CORES.branco,
+    color: cores.branco,
     fontSize: 16,
     fontWeight: "700",
   },

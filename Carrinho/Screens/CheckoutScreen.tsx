@@ -1,5 +1,5 @@
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Pressable,
@@ -12,7 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { BotaoPrincipal } from "../Components/BotaoPrincipal";
 import { ItemCarrinhoCard } from "../Components/ItemCarrinhoCard";
 import { MensagemErro } from "../Components/MensagemErro";
-import { CORES } from "../Constants/cores";
+import type { Paleta } from "../Constants/cores";
 import {
   MENSAGENS_CHECKOUT,
   ehFormaPagamentoConhecida,
@@ -21,6 +21,7 @@ import {
 import { MENSAGENS_CARRINHO } from "../Constants/mensagensCarrinho";
 import { useAuth } from "../Context/AuthContext";
 import { useCarrinho } from "../Context/CarrinhoContext";
+import { useTema } from "../Context/TemaContext";
 import { listarFormasPagamento, registrarCompra } from "../Service/compras";
 import type {
   ErroCheckout,
@@ -96,6 +97,8 @@ export function CheckoutScreen({ navigation }: CheckoutScreenProps) {
   const { usuario } = useAuth();
   const { carrinho, carregando, erro, recarregar, limparCarrinho } =
     useCarrinho();
+  const { cores } = useTema();
+  const estilos = useMemo(() => criarEstilos(cores), [cores]);
 
   const [formasPagamento, setFormasPagamento] = useState<
     FormaPagamentoDisponivel[]
@@ -417,7 +420,7 @@ export function CheckoutScreen({ navigation }: CheckoutScreenProps) {
 
         {carregandoFormas ? (
           <View style={estilos.estadoCentral}>
-            <ActivityIndicator color={CORES.primaria} size="small" />
+            <ActivityIndicator color={cores.primaria} size="small" />
             <Text style={estilos.textoEstado}>
               {MENSAGENS_CHECKOUT.carregandoFormas}
             </Text>
@@ -514,7 +517,7 @@ export function CheckoutScreen({ navigation }: CheckoutScreenProps) {
             </>
           ) : (
             <>
-              <ActivityIndicator color={CORES.primaria} size="large" />
+              <ActivityIndicator color={cores.primaria} size="large" />
               <Text style={estilos.textoEstado}>
                 {MENSAGENS_CHECKOUT.carregando}
               </Text>
@@ -593,6 +596,9 @@ type CabecalhoProps = {
 };
 
 function Cabecalho({ aoVoltar }: CabecalhoProps) {
+  const { cores } = useTema();
+  const estilos = useMemo(() => criarEstilos(cores), [cores]);
+
   return (
     <View style={estilos.cabecalho}>
       <Pressable
@@ -618,15 +624,15 @@ function Cabecalho({ aoVoltar }: CabecalhoProps) {
   );
 }
 
-const estilos = StyleSheet.create({
+const criarEstilos = (cores: Paleta) => StyleSheet.create({
   container: {
-    backgroundColor: CORES.fundo,
+    backgroundColor: cores.fundo,
     flex: 1,
   },
   cabecalho: {
     alignItems: "center",
-    backgroundColor: CORES.branco,
-    borderBottomColor: CORES.borda,
+    backgroundColor: cores.branco,
+    borderBottomColor: cores.borda,
     borderBottomWidth: 1,
     flexDirection: "row",
     minHeight: 56,
@@ -641,15 +647,15 @@ const estilos = StyleSheet.create({
     paddingVertical: 8,
   },
   botaoCabecalhoPressionado: {
-    backgroundColor: CORES.primariaClara,
+    backgroundColor: cores.primariaClara,
   },
   textoBotaoCabecalho: {
-    color: CORES.primaria,
+    color: cores.primaria,
     fontSize: 15,
     fontWeight: "700",
   },
   tituloCabecalho: {
-    color: CORES.texto,
+    color: cores.texto,
     flex: 1,
     fontSize: 18,
     fontWeight: "700",
@@ -666,7 +672,7 @@ const estilos = StyleSheet.create({
     marginBottom: 8,
   },
   tituloSecao: {
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 16,
     fontWeight: "700",
     marginBottom: 12,
@@ -675,8 +681,8 @@ const estilos = StyleSheet.create({
     marginBottom: 12,
   },
   resumo: {
-    backgroundColor: CORES.branco,
-    borderColor: CORES.borda,
+    backgroundColor: cores.branco,
+    borderColor: cores.borda,
     borderRadius: 12,
     borderWidth: 1,
     padding: 16,
@@ -688,16 +694,16 @@ const estilos = StyleSheet.create({
     marginBottom: 8,
   },
   labelResumo: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 14,
   },
   valorResumo: {
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 16,
     fontWeight: "700",
   },
   totalResumo: {
-    color: CORES.primaria,
+    color: cores.primaria,
     fontSize: 22,
     fontWeight: "700",
   },
@@ -706,7 +712,7 @@ const estilos = StyleSheet.create({
     paddingVertical: 16,
   },
   textoEstado: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 14,
     marginTop: 8,
     textAlign: "center",
@@ -716,8 +722,8 @@ const estilos = StyleSheet.create({
   },
   opcaoPagamento: {
     alignItems: "center",
-    backgroundColor: CORES.branco,
-    borderColor: CORES.borda,
+    backgroundColor: cores.branco,
+    borderColor: cores.borda,
     borderRadius: 12,
     borderWidth: 1,
     flexDirection: "row",
@@ -727,17 +733,17 @@ const estilos = StyleSheet.create({
     paddingVertical: 12,
   },
   opcaoPagamentoSelecionada: {
-    borderColor: CORES.primaria,
+    borderColor: cores.primaria,
     borderWidth: 2,
   },
   opcaoPagamentoDesabilitada: {
     opacity: 0.55,
   },
   opcaoPagamentoPressionada: {
-    backgroundColor: CORES.primariaClara,
+    backgroundColor: cores.primariaClara,
   },
   radio: {
-    borderColor: CORES.textoSecundario,
+    borderColor: cores.textoSecundario,
     borderRadius: 10,
     borderWidth: 2,
     height: 20,
@@ -745,39 +751,39 @@ const estilos = StyleSheet.create({
     width: 20,
   },
   radioSelecionado: {
-    backgroundColor: CORES.primaria,
-    borderColor: CORES.primaria,
+    backgroundColor: cores.primaria,
+    borderColor: cores.primaria,
   },
   textoOpcaoPagamento: {
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 16,
     fontWeight: "600",
   },
   textoOpcaoDesabilitada: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
   },
   indisponivel: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 12,
     marginLeft: "auto",
   },
   avisoDivergencia: {
-    backgroundColor: CORES.primariaClara,
-    borderColor: CORES.primaria,
+    backgroundColor: cores.primariaClara,
+    borderColor: cores.primaria,
     borderRadius: 12,
     borderWidth: 1,
     marginBottom: 16,
     padding: 16,
   },
   textoAvisoDivergencia: {
-    color: CORES.texto,
+    color: cores.texto,
     fontSize: 14,
     fontWeight: "600",
     textAlign: "center",
   },
   rodape: {
-    backgroundColor: CORES.branco,
-    borderTopColor: CORES.borda,
+    backgroundColor: cores.branco,
+    borderTopColor: cores.borda,
     borderTopWidth: 1,
     padding: 16,
   },

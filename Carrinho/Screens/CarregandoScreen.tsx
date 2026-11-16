@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
   ActivityIndicator,
   StyleSheet,
@@ -5,22 +6,26 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { CORES } from "../Constants/cores";
+import type { Paleta } from "../Constants/cores";
+import { useTema } from "../Context/TemaContext";
 
 export function CarregandoScreen() {
+  const { cores } = useTema();
+  const estilos = useMemo(() => criarEstilos(cores), [cores]);
+
   return (
     <SafeAreaView style={estilos.container}>
       <View style={estilos.conteudo}>
-        <ActivityIndicator color={CORES.primaria} size="large" />
+        <ActivityIndicator color={cores.primaria} size="large" />
         <Text style={estilos.texto}>Carregando...</Text>
       </View>
     </SafeAreaView>
   );
 }
 
-const estilos = StyleSheet.create({
+const criarEstilos = (cores: Paleta) => StyleSheet.create({
   container: {
-    backgroundColor: CORES.fundo,
+    backgroundColor: cores.fundo,
     flex: 1,
   },
   conteudo: {
@@ -29,7 +34,7 @@ const estilos = StyleSheet.create({
     justifyContent: "center",
   },
   texto: {
-    color: CORES.textoSecundario,
+    color: cores.textoSecundario,
     fontSize: 16,
     marginTop: 12,
   },
