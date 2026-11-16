@@ -7,6 +7,7 @@ import type {
 } from "../Types/catalogo";
 import type { Categoria, Produto } from "../Types/types";
 import { ROTAS } from "./rotas";
+import { notificarTokenExpirado, obterToken } from "./sessao";
 
 function criarErro(codigo: string, mensagem: string): ErroCatalogo {
   return { codigo, mensagem };
@@ -114,13 +115,21 @@ async function requisitar(
 ): Promise<unknown> {
   let resposta: Response;
 
+  const headers: Record<string, string> = {
+    Accept: "application/json",
+    "x-api-key": API_KEY,
+  };
+
+  const token = obterToken();
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   try {
     resposta = await fetch(url, {
       method: "GET",
-      headers: {
-        Accept: "application/json",
-        "x-api-key": API_KEY,
-      },
+      headers,
       signal,
     });
   } catch (erro) {
@@ -132,6 +141,10 @@ async function requisitar(
   }
 
   if (!resposta.ok) {
+    if (resposta.status === 401) {
+      notificarTokenExpirado();
+    }
+
     throw erroPorStatus(resposta.status);
   }
 

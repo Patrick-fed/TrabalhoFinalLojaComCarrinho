@@ -1,6 +1,9 @@
 import { API_URL } from "../Config/apiConfig";
 
 export const ROTAS = {
+  usuarios: `${API_URL}/usuarios`,
+  login: `${API_URL}/login`,
+
   produtos: `${API_URL}/produtos`,
   produtoPorId: (id: number) => `${API_URL}/produtos/${id}`,
 

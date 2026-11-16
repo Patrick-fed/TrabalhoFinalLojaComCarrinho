@@ -10,16 +10,17 @@ import type { ReactNode } from "react";
 import {
   cadastrarUsuario,
   entrar as entrarNoServico,
-  observarSessao,
+  restaurarSessao,
   sair as sairDoServico,
 } from "../Service/auth";
-import type { Conta, Credenciais } from "../Types/auth";
+import { assinarExpiracao, limparSessao } from "../Service/sessao";
+import type { Conta, Credenciais, DadosCadastro } from "../Types/auth";
 
 type AuthContextValue = {
   usuario: Conta | null;
   carregando: boolean;
   entrar: (credenciais: Credenciais) => Promise<void>;
-  cadastrar: (credenciais: Credenciais) => Promise<void>;
+  cadastrar: (dados: DadosCadastro) => Promise<void>;
   sair: () => Promise<void>;
 };
 
@@ -36,19 +37,25 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     let ativo = true;
 
-    const cancelar = observarSessao((conta) => {
-      if (!ativo) {
-        return;
-      }
+    void (async () => {
+      const conta = await restaurarSessao();
 
-      setUsuario(conta);
-      setCarregando(false);
-    });
+      if (ativo) {
+        setUsuario(conta);
+        setCarregando(false);
+      }
+    })();
 
     return () => {
       ativo = false;
-      cancelar();
     };
+  }, []);
+
+  useEffect(() => {
+    return assinarExpiracao(() => {
+      setUsuario(null);
+      void limparSessao();
+    });
   }, []);
 
   const entrar = useCallback(async (credenciais: Credenciais) => {
@@ -56,8 +63,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setUsuario(conta);
   }, []);
 
-  const cadastrar = useCallback(async (credenciais: Credenciais) => {
-    const conta = await cadastrarUsuario(credenciais);
+  const cadastrar = useCallback(async (dados: DadosCadastro) => {
+    const conta = await cadastrarUsuario(dados);
     setUsuario(conta);
   }, []);
 

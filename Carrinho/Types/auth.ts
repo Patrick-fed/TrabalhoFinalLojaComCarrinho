@@ -3,9 +3,15 @@ export type Credenciais = {
   senha: string;
 };
 
+export type DadosCadastro = Credenciais & {
+  nome: string;
+};
+
 export type Conta = {
-  uid: string;
-  email: string | null;
+  id: string;
+  nome: string;
+  email: string;
+  token: string;
 };
 
 export type ErroAutenticacao = {

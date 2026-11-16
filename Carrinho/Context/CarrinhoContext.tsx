@@ -56,7 +56,7 @@ function ehCancelamento(erro: unknown): boolean {
 
 export function CarrinhoProvider({ children }: CarrinhoProviderProps) {
   const { usuario } = useAuth();
-  const uid = usuario?.uid ?? null;
+  const uid = usuario?.id ?? null;
 
   const [carrinho, setCarrinho] = useState<Carrinho | null>(null);
   const [carregando, setCarregando] = useState(false);

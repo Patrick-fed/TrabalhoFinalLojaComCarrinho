@@ -14,6 +14,7 @@ import type {
   ItemCarrinho,
 } from "../Types/types";
 import { ROTAS } from "./rotas";
+import { notificarTokenExpirado, obterToken } from "./sessao";
 
 type ContextoErro = "formasPagamento" | "finalizacao";
 
@@ -21,6 +22,7 @@ type OpcoesRequisicao = {
   method: "GET" | "POST";
   body?: unknown;
   signal?: AbortSignal;
+  comToken?: boolean;
 };
 
 function criarErro(codigo: string, mensagem: string): ErroCheckout {
@@ -178,11 +180,17 @@ function converterCompra(valor: unknown, usuarioId: string): Compra {
     criadaEm,
   } = valor;
 
+  const usuarioNormalizado =
+    typeof usuarioIdResposta === "string"
+      ? usuarioIdResposta.trim()
+      : ehNumeroFinito(usuarioIdResposta)
+        ? String(usuarioIdResposta)
+        : "";
+
   if (
     !ehNumeroFinito(id) ||
-    typeof usuarioIdResposta !== "string" ||
-    usuarioIdResposta.trim().length === 0 ||
-    usuarioIdResposta.trim() !== usuarioId ||
+    usuarioNormalizado.length === 0 ||
+    usuarioNormalizado !== usuarioId ||
     !Array.isArray(itens) ||
     !ehNumeroFinito(quantidadeTotal) ||
     !Number.isInteger(quantidadeTotal) ||
@@ -201,7 +209,7 @@ function converterCompra(valor: unknown, usuarioId: string): Compra {
 
   return {
     id,
-    usuarioId: usuarioIdResposta.trim(),
+    usuarioId: usuarioNormalizado,
     itens: itens.map(converterItem),
     quantidadeTotal,
     total,
@@ -220,6 +228,12 @@ async function requisitar(
     Accept: "application/json",
     "x-api-key": API_KEY,
   };
+
+  const token = opcoes.comToken === false ? null : obterToken();
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
 
   if (opcoes.body !== undefined) {
     headers["Content-Type"] = "application/json";
@@ -247,6 +261,10 @@ async function requisitar(
   }
 
   if (!resposta.ok) {
+    if (resposta.status === 401) {
+      notificarTokenExpirado();
+    }
+
     throw erroPorStatus(resposta.status, contexto);
   }
 
@@ -312,6 +330,7 @@ export async function registrarCompra(
       method: "POST",
       body: { usuarioId: usuarioIdLimpo, formaPagamento },
       signal,
+      comToken: false,
     },
     "finalizacao"
   );

@@ -30,6 +30,7 @@ type CadastroScreenProps = NativeStackScreenProps<
 
 export function CadastroScreen({ navigation }: CadastroScreenProps) {
   const { cadastrar } = useAuth();
+  const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [confirmacao, setConfirmacao] = useState("");
@@ -47,7 +48,7 @@ export function CadastroScreen({ navigation }: CadastroScreenProps) {
       return;
     }
 
-    const novosErros = validarCadastro(email, senha, confirmacao);
+    const novosErros = validarCadastro(nome, email, senha, confirmacao);
     setErros(novosErros);
     setErroGeral(null);
 
@@ -58,7 +59,7 @@ export function CadastroScreen({ navigation }: CadastroScreenProps) {
     setEnviando(true);
 
     try {
-      await cadastrar({ email, senha });
+      await cadastrar({ nome, email, senha });
     } catch (erro) {
       setErroGeral(obterMensagemDeErro(erro));
     } finally {
@@ -83,6 +84,19 @@ export function CadastroScreen({ navigation }: CadastroScreenProps) {
             </Text>
 
             <MensagemErro mensagem={erroGeral} />
+
+            <CampoTexto
+              label="Nome"
+              valor={nome}
+              aoMudar={(valor) => {
+                setNome(valor);
+                limparErro("nome");
+              }}
+              erro={erros.nome}
+              placeholder="Seu nome"
+              autoComplete="name"
+              returnKeyType="next"
+            />
 
             <CampoTexto
               label="E-mail"

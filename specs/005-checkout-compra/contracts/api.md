@@ -58,6 +58,14 @@ Content-Type: application/json
 Accept: application/json
 ```
 
+> **Workaround (2026-11-16)**: a API retorna `400 {"erro":"O carrinho está vazio."}`
+> de forma determinística quando `Authorization: Bearer` é enviado neste endpoint,
+> mesmo com o carrinho presente no `GET /carrinho/:usuarioId` (verificado nas contas
+> 1 e 5; a compra 17, feita às 22:42 UTC com Bearer, ainda tinha funcionado —
+> regressão no caminho autenticado do servidor). O app **não envia Bearer** apenas
+> em `POST /compras`; sem o header a chamada retorna `201`. Reavaliar quando a API
+> for corrigida.
+
 ```json
 {
   "usuarioId": "teste",
@@ -92,7 +100,10 @@ Accept: application/json
 **Validação no app**
 
 - `id` é número finito (o exemplo antigo com `"compra_123"` estava errado).
-- `usuarioId`, `status` e `criadaEm` são strings não vazias.
+- `usuarioId` pode vir como string (eco do corpo, sem token) ou como **número**
+  (derivado do token JWT — verificado em 2026-11-16 com `{"usuarioId": 3}`);
+  o app normaliza com `String(valor)` e compara com o `usuarioId` enviado.
+- `status` e `criadaEm` são strings não vazias.
 - `total` e `quantidadeTotal` são inteiros não negativos.
 - `formaPagamento` é `pix`, `cartao` ou `boleto`.
 - `itens` é um array válido de `ItemCarrinho` (com `imagem` e `subtotal`).

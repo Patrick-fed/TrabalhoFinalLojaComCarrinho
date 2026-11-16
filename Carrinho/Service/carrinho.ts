@@ -3,6 +3,7 @@ import { MENSAGENS_ERRO_CARRINHO } from "../Constants/mensagensCarrinho";
 import type { ErroCarrinho } from "../Types/carrinho";
 import type { Carrinho, ItemCarrinho } from "../Types/types";
 import { ROTAS } from "./rotas";
+import { notificarTokenExpirado, obterToken } from "./sessao";
 
 type MetodoHttp = "GET" | "POST" | "PUT" | "DELETE";
 
@@ -143,6 +144,12 @@ async function requisitar(
     "x-api-key": API_KEY,
   };
 
+  const token = obterToken();
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   if (opcoes.body !== undefined) {
     headers["Content-Type"] = "application/json";
   }
@@ -166,6 +173,10 @@ async function requisitar(
   }
 
   if (!resposta.ok) {
+    if (resposta.status === 401) {
+      notificarTokenExpirado();
+    }
+
     throw erroPorStatus(resposta.status);
   }
 

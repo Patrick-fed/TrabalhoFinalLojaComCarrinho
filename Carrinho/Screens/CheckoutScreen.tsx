@@ -121,7 +121,7 @@ export function CheckoutScreen({ navigation }: CheckoutScreenProps) {
   const controladorFormasRef = useRef<AbortController | null>(null);
   const controladorFinalizacaoRef = useRef<AbortController | null>(null);
 
-  const usuarioId = usuario?.uid ?? null;
+  const usuarioId = usuario?.id ?? null;
 
   const carregarFormas = useCallback(async (signal?: AbortSignal) => {
     setCarregandoFormas(true);

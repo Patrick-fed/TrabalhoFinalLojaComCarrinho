@@ -1,6 +1,7 @@
 import { MENSAGENS_VALIDACAO } from "../Constants/mensagensErro";
 
 export type ErrosFormulario = {
+  nome?: string;
   email?: string;
   senha?: string;
   confirmacao?: string;
@@ -10,6 +11,14 @@ const FORMATO_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function normalizarEmail(email: string): string {
   return email.trim().toLowerCase();
+}
+
+export function validarNome(nome: string): string | undefined {
+  if (nome.trim().length === 0) {
+    return MENSAGENS_VALIDACAO.nomeObrigatorio;
+  }
+
+  return undefined;
 }
 
 export function validarEmail(email: string): string | undefined {
@@ -57,11 +66,13 @@ export function validarConfirmacao(
 }
 
 export function validarCadastro(
+  nome: string,
   email: string,
   senha: string,
   confirmacao: string
 ): ErrosFormulario {
   return {
+    nome: validarNome(nome),
     email: validarEmail(email),
     senha: validarSenha(senha),
     confirmacao: validarConfirmacao(senha, confirmacao),
